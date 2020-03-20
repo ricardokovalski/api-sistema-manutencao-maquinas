@@ -17,9 +17,15 @@ use Illuminate\Http\Request;
     return $request->user();
 });*/
 
-Route::post('authenticate', 'AuthController@authenticate');
-Route::post('unauthenticated', 'AuthController@unauthenticated');
-Route::post('refresh', 'AuthController@refresh');
-Route::post('me', 'AuthController@me');
+Route::post('auth/login', 'Api\AuthController@login');
 
-Route::resource('users', 'Api\UserController')->except('create', 'edit');
+/*Route::group([
+    'middleware' => 'jwt.verify',
+], function () {*/
+
+    Route::post('auth/logout', 'Api\AuthController@logout');
+    Route::post('auth/refresh', 'Api\AuthController@refresh');
+    Route::post('auth/me', 'Api\AuthController@me');
+
+    Route::resource('users', 'Api\UserController')->except('create', 'edit');
+/*});*/
