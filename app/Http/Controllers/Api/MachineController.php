@@ -3,48 +3,44 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Repositories\Contracts\UserRepositoryContract;
-use App\Http\Resources\UserResponse;
+use App\Repositories\Contracts\MachineRepositoryContract;
+use App\Http\Resources\MachineResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-/**
- * Class UserController
- * @package App\Http\Controllers\Api
- */
-class UserController extends Controller
+class MachineController extends Controller
 {
     /**
-     * @var UserRepositoryContract
+     * @var MachineRepositoryContract
      */
-    protected $userRepository;
+    protected $machineRepository;
 
     /**
-     * UserController constructor.
-     * @param UserRepositoryContract $userRepository
+     * MachineController constructor.
+     * @param MachineRepositoryContract $machineRepository
      */
-    public function __construct(UserRepositoryContract $userRepository)
+    public function __construct(MachineRepositoryContract $machineRepository)
     {
         /*$this->middleware('auth:api', [
             'except' => ['store']
         ]);*/
 
-        $this->userRepository = $userRepository;
+        $this->machineRepository = $machineRepository;
     }
 
     /**
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index() : JsonResponse
     {
         try {
 
-            $users = $this->userRepository->all([
-                'id', 'name', 'email',
+            $machines = $this->machineRepository->all([
+                'id', 'name'
             ]);
 
-            return (new UserResponse($users))
+            return (new MachineResponse($machines))
                 ->response()
                 ->setStatusCode(Response::HTTP_OK);
 
@@ -59,15 +55,15 @@ class UserController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function store(Request $request) : JsonResponse
     {
         try {
 
-            $user = $this->userRepository->create($request->all());
+            $machine = $this->machineRepository->create($request->all());
 
-            return (new UserResponse($user))
+            return (new MachineResponse($machine))
                 ->response()
                 ->setStatusCode(Response::HTTP_CREATED);
 
@@ -81,16 +77,16 @@ class UserController extends Controller
     }
 
     /**
-     * @param int $id
-     * @return \Illuminate\Http\JsonResponse
+     * @param $id
+     * @return JsonResponse
      */
-    public function show(int $id) : JsonResponse
+    public function show($id) : JsonResponse
     {
         try {
 
-            $user = $this->userRepository->find($id);
+            $machine = $this->machineRepository->find($id);
 
-            return (new UserResponse($user))
+            return (new MachineResponse($machine))
                 ->response()
                 ->setStatusCode(Response::HTTP_OK);
 
@@ -105,19 +101,19 @@ class UserController extends Controller
 
     /**
      * @param Request $request
-     * @param int $id
-     * @return \Illuminate\Http\JsonResponse
+     * @param $id
+     * @return JsonResponse
      */
-    public function update(Request $request, int $id) : JsonResponse
+    public function update(Request $request, $id) : JsonResponse
     {
         try {
 
-            $user = $this->userRepository->update(
+            $machine = $this->machineRepository->update(
                 $request->all(),
                 $id
             );
 
-            return (new UserResponse($user))
+            return (new MachineResponse($machine))
                 ->response()
                 ->setStatusCode(Response::HTTP_OK);
 
@@ -131,16 +127,16 @@ class UserController extends Controller
     }
 
     /**
-     * @param int $id
-     * @return \Illuminate\Http\JsonResponse
+     * @param $id
+     * @return JsonResponse
      */
-    public function destroy(int $id) : JsonResponse
+    public function destroy($id) : JsonResponse
     {
         try {
 
-            $user = $this->userRepository->delete($id);
+            $machine = $this->machineRepository->delete($id);
 
-            return (new UserResponse($user))
+            return (new MachineResponse($machine))
                 ->response()
                 ->setStatusCode(Response::HTTP_NO_CONTENT);
 

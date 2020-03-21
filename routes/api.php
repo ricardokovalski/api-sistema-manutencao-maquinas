@@ -28,4 +28,5 @@ Route::post('auth/login', 'Api\AuthController@login');
     Route::post('auth/me', 'Api\AuthController@me');
 
     Route::resource('users', 'Api\UserController')->except('create', 'edit');
+    Route::resource('machines', 'Api\MachineController')->except('create', 'edit');
 /*});*/
