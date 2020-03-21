@@ -41,7 +41,9 @@ class UserController extends Controller
         try {
 
             $users = $this->userRepository->all([
-                'id', 'name', 'email',
+                'id',
+                'name',
+                'email',
             ]);
 
             return (new UserResponse($users))
@@ -88,7 +90,11 @@ class UserController extends Controller
     {
         try {
 
-            $user = $this->userRepository->find($id);
+            $user = $this->userRepository->find($id, [
+                'id',
+                'name',
+                'email',
+            ]);
 
             return (new UserResponse($user))
                 ->response()
@@ -138,11 +144,9 @@ class UserController extends Controller
     {
         try {
 
-            $user = $this->userRepository->delete($id);
-
-            return (new UserResponse($user))
-                ->response()
-                ->setStatusCode(Response::HTTP_NO_CONTENT);
+            return response()->json([
+                'data' => $this->userRepository->delete($id)
+            ], Response::HTTP_NO_CONTENT);
 
         } catch (\Exception $exception) {
 

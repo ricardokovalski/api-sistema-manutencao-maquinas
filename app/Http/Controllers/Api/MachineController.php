@@ -37,7 +37,14 @@ class MachineController extends Controller
         try {
 
             $machines = $this->machineRepository->all([
-                'id', 'name'
+                'id',
+                'name',
+                'description',
+                'technical',
+                'patrimony',
+                'review_period',
+                'warning_period',
+                'warning_email_address',
             ]);
 
             return (new MachineResponse($machines))
@@ -84,7 +91,15 @@ class MachineController extends Controller
     {
         try {
 
-            $machine = $this->machineRepository->find($id);
+            $machine = $this->machineRepository->find($id, [
+                'name',
+                'description',
+                'technical',
+                'patrimony',
+                'review_period',
+                'warning_period',
+                'warning_email_address',
+            ]);
 
             return (new MachineResponse($machine))
                 ->response()
@@ -134,11 +149,9 @@ class MachineController extends Controller
     {
         try {
 
-            $machine = $this->machineRepository->delete($id);
-
-            return (new MachineResponse($machine))
-                ->response()
-                ->setStatusCode(Response::HTTP_NO_CONTENT);
+            return response()->json([
+                'data' => $this->machineRepository->delete($id)
+            ], Response::HTTP_NO_CONTENT);
 
         } catch (\Exception $exception) {
 
