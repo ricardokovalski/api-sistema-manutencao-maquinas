@@ -146,7 +146,7 @@ class UserController extends Controller
 
             return response()->json([
                 'data' => $this->userRepository->delete($id)
-            ], Response::HTTP_NO_CONTENT);
+            ], Response::HTTP_OK);
 
         } catch (\Exception $exception) {
 

@@ -151,7 +151,7 @@ class MachineController extends Controller
 
             return response()->json([
                 'data' => $this->machineRepository->delete($id)
-            ], Response::HTTP_NO_CONTENT);
+            ], Response::HTTP_OK);
 
         } catch (\Exception $exception) {
 
