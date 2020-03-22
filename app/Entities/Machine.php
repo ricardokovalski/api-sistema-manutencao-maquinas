@@ -28,4 +28,12 @@ class Machine extends Model
         'created_at',
         'updated_at',
     ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'machine_users', 'machine_id', 'user_id');
+    }
 }

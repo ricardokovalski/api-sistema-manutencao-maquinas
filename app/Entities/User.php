@@ -61,4 +61,12 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function machines()
+    {
+        return $this->belongsToMany(Machine::class, 'machine_users', 'user_id', 'machine_id');
+    }
 }
