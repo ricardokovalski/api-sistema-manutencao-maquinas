@@ -3,9 +3,9 @@
 namespace App\Repositories\Users;
 
 use App\Entities\User;
-use Prettus\Repository\Eloquent\BaseRepository;
-//use Prettus\Repository\Criteria\RequestCriteria;
 use App\Repositories\Contracts\UserRepositoryContract;
+//use Prettus\Repository\Criteria\RequestCriteria;
+use Prettus\Repository\Eloquent\BaseRepository;
 
 /**
  * Class UserRepository
