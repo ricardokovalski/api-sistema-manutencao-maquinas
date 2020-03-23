@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class MachineTableSeeder extends Seeder
+class PermissionsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,6 +11,6 @@ class MachineTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Entities\Machine::class, 20)->create();
+        //
     }
 }
