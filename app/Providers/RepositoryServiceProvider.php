@@ -2,12 +2,13 @@
 
 namespace App\Providers;
 
-use App\Entities\ReviewType;
 use App\Repositories\Contracts\MachineRepositoryContract;
+use App\Repositories\Contracts\PermissionRepositoryContract;
 use App\Repositories\Contracts\ReviewTypeRepositoryContract;
 use App\Repositories\Contracts\RoleRepositoryContract;
 use App\Repositories\Contracts\UserRepositoryContract;
 use App\Repositories\Machines\MachineRepository;
+use App\Repositories\Permissions\PermissionRepository;
 use App\Repositories\ReviewTypes\ReviewTypeRepository;
 use App\Repositories\Roles\RoleRepository;
 use App\Repositories\Users\UserRepository;
@@ -33,6 +34,8 @@ class RepositoryServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->app->bind(MachineRepositoryContract::class, MachineRepository::class);
+
+        $this->app->bind(PermissionRepositoryContract::class, PermissionRepository::class);
 
         $this->app->bind(ReviewTypeRepositoryContract::class, ReviewTypeRepository::class);
 

@@ -15,7 +15,7 @@ use Spatie\Permission\Models\Permission;
 |
 */
 
-Route::get('/', function (\App\Repositories\Contracts\RoleRepositoryContract $repository) {
+Route::get('/', function (\App\Repositories\Roles\RoleRepository $repository) {
 
     //$role = Role::create(['name' => 'writer']);
     //$role = Role::findById(1);

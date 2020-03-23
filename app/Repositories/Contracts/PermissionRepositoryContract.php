@@ -3,10 +3,10 @@
 namespace App\Repositories\Contracts;
 
 /**
- * Interface RoleRepositoryContract
+ * Interface PermissionRepositoryContract
  * @package App\Repositories\Contracts
  */
-interface RoleRepositoryContract
+interface PermissionRepositoryContract
 {
     //
 }
