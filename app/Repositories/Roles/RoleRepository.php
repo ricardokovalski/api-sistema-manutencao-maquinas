@@ -26,6 +26,15 @@ class RoleRepository implements RoleRepositoryContract
     }
 
     /**
+     * @param array $columns
+     * @return \Illuminate\Database\Eloquent\Collection|Role[]
+     */
+    public function all(array $columns = ['*'])
+    {
+        return $this->model::all($columns);
+    }
+
+    /**
      * @param array $attributes
      * @return \Spatie\Permission\Contracts\Role
      */
