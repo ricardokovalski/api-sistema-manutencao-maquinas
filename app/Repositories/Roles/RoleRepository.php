@@ -54,9 +54,10 @@ class RoleRepository implements RoleRepositoryContract
 
     /**
      * @param int $id
+     * @param array $columns
      * @return \Spatie\Permission\Contracts\Role
      */
-    public function findById(int $id): \Spatie\Permission\Contracts\Role
+    public function findById(int $id, array $columns = ['*']): \Spatie\Permission\Contracts\Role
     {
         return $this->model::findById($id);
     }

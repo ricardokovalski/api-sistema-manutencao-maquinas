@@ -51,34 +51,48 @@ class RoleController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return JsonResponse
      */
     public function store(Request $request): JsonResponse
     {
-        //
+        try {
+
+            $role = $this->roleRepository->create($request->all());
+
+            return (new RoleResponse($role))
+                ->response()
+                ->setStatusCode(Response::HTTP_CREATED);
+
+        } catch (\Exception $exception) {
+
+            return response()->json([
+                'error' => $exception->getMessage()
+            ], Response::HTTP_BAD_REQUEST);
+
+        }
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return JsonResponse
      */
     public function show($id): JsonResponse
     {
-        //
-    }
+        try {
 
-    public function update(Request $request, $id)
-    {
-        //
-    }
+            $role = $this->roleRepository->findById($id);
 
-    public function destroy($id)
-    {
-        //
+            return (new RoleResponse($role))
+                ->response()
+                ->setStatusCode(Response::HTTP_OK);
+
+        } catch (\Exception $exception) {
+
+            return response()->json([
+                'error' => $exception->getMessage()
+            ], Response::HTTP_BAD_REQUEST);
+
+        }
     }
 }
