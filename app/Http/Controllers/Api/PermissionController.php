@@ -3,26 +3,26 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\RoleResponse;
-use App\Repositories\Contracts\RoleRepositoryContract;
+use App\Http\Resources\PermissionResponse;
+use App\Repositories\Contracts\PermissionRepositoryContract;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class RoleController extends Controller
+class PermissionController extends Controller
 {
     /**
-     * @var RoleRepositoryContract
+     * @var PermissionRepositoryContract
      */
-    protected $roleRepository;
+    protected $permissionRepository;
 
     /**
-     * RoleController constructor.
-     * @param RoleRepositoryContract $roleRepository
+     * PermissionController constructor.
+     * @param PermissionRepositoryContract $permissionRepository
      */
-    public function __construct(RoleRepositoryContract $roleRepository)
+    public function __construct(PermissionRepositoryContract $permissionRepository)
     {
-        $this->roleRepository = $roleRepository;
+        $this->permissionRepository = $permissionRepository;
     }
 
     /**
@@ -32,12 +32,12 @@ class RoleController extends Controller
     {
         try {
 
-            $roles = $this->roleRepository->all([
+            $roles = $this->permissionRepository->all([
                 'id',
                 'name',
             ]);
 
-            return (new RoleResponse($roles))
+            return (new PermissionResponse($roles))
                 ->response()
                 ->setStatusCode(Response::HTTP_OK);
 
@@ -58,9 +58,9 @@ class RoleController extends Controller
     {
         try {
 
-            $role = $this->roleRepository->create($request->all());
+            $role = $this->permissionRepository->create($request->all());
 
-            return (new RoleResponse($role))
+            return (new PermissionResponse($role))
                 ->response()
                 ->setStatusCode(Response::HTTP_CREATED);
 
@@ -81,11 +81,11 @@ class RoleController extends Controller
     {
         try {
 
-            $role = $this->roleRepository->findById($id, [
+            $role = $this->permissionRepository->findById($id, [
                 'id', 'name'
             ]);
 
-            return (new RoleResponse($role))
+            return (new PermissionResponse($role))
                 ->response()
                 ->setStatusCode(Response::HTTP_OK);
 

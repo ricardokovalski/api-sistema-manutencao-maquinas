@@ -36,7 +36,7 @@ class UserController extends Controller
     /**
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index() : JsonResponse
+    public function index(): JsonResponse
     {
         try {
 
@@ -63,7 +63,7 @@ class UserController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request) : JsonResponse
+    public function store(Request $request): JsonResponse
     {
         try {
 
@@ -86,7 +86,7 @@ class UserController extends Controller
      * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(int $id) : JsonResponse
+    public function show(int $id): JsonResponse
     {
         try {
 
@@ -114,7 +114,7 @@ class UserController extends Controller
      * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, int $id) : JsonResponse
+    public function update(Request $request, int $id): JsonResponse
     {
         try {
 
@@ -140,7 +140,7 @@ class UserController extends Controller
      * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(int $id) : JsonResponse
+    public function destroy(int $id): JsonResponse
     {
         try {
 

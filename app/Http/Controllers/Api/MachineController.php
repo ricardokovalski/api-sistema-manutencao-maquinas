@@ -32,7 +32,7 @@ class MachineController extends Controller
     /**
      * @return JsonResponse
      */
-    public function index() : JsonResponse
+    public function index(): JsonResponse
     {
         try {
 
@@ -64,7 +64,7 @@ class MachineController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function store(Request $request) : JsonResponse
+    public function store(Request $request): JsonResponse
     {
         try {
 
@@ -87,7 +87,7 @@ class MachineController extends Controller
      * @param $id
      * @return JsonResponse
      */
-    public function show($id) : JsonResponse
+    public function show($id): JsonResponse
     {
         try {
 
@@ -119,7 +119,7 @@ class MachineController extends Controller
      * @param $id
      * @return JsonResponse
      */
-    public function update(Request $request, $id) : JsonResponse
+    public function update(Request $request, $id): JsonResponse
     {
         try {
 
@@ -145,7 +145,7 @@ class MachineController extends Controller
      * @param $id
      * @return JsonResponse
      */
-    public function destroy($id) : JsonResponse
+    public function destroy($id): JsonResponse
     {
         try {
 
