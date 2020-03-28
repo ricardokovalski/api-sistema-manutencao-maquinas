@@ -28,4 +28,14 @@ class Peace extends Model
         'created_at',
         'updated_at',
     ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function maintenance()
+    {
+        return $this->belongsToMany(Maintenance::class, 'maintenance_peaces', 'peace_id', 'maintenance_id')
+            ->withPivot('amount_used')
+            ->withTimestamps();
+    }
 }

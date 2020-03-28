@@ -37,13 +37,16 @@ class MaintenanceController extends Controller
                     'reviewType' => function ($query) {
                         $query->select('id', 'name');
                     },
+                    'peaces' => function ($query) {
+                        $query->select('id', 'name');
+                    },
                 ])
                 ->all([
-                    'maintenance.id',
-                    'maintenance.machine_id',
-                    'maintenance.review_type_id',
-                    'maintenance.description',
-                    'maintenance.review_at',
+                    'id',
+                    'machine_id',
+                    'review_type_id',
+                    'description',
+                    'review_at',
                 ]);
 
             return (new MaintenanceResponse($maintenance))
@@ -97,12 +100,15 @@ class MaintenanceController extends Controller
                 'reviewType' => function ($query) {
                     $query->select('id', 'name');
                 },
+                'peaces' => function ($query) {
+                    $query->select('id', 'name');
+                },
             ])->find($id, [
-                'maintenance.id',
-                'maintenance.machine_id',
-                'maintenance.review_type_id',
-                'maintenance.description',
-                'maintenance.review_at',
+                'id',
+                'machine_id',
+                'review_type_id',
+                'description',
+                'review_at',
             ]);
 
             return (new MaintenanceResponse($maintenance))

@@ -36,14 +36,20 @@ class PeaceController extends Controller
     {
         try {
 
-            $peaces = $this->peaceRepository->all([
-                'id',
-                'code',
-                'name',
-                'description',
-                'stock_quantity',
-                'minimal_quantity',
-            ]);
+            $peaces = $this->peaceRepository
+                ->with([
+                    'maintenance' => function ($query) {
+                        $query->select('id', 'machine_id', 'review_type_id');
+                    },
+                ])
+                ->all([
+                    'id',
+                    'code',
+                    'name',
+                    'description',
+                    'stock_quantity',
+                    'minimal_quantity',
+                ]);
 
             return (new PeaceResponse($peaces))
                 ->response()
@@ -89,14 +95,20 @@ class PeaceController extends Controller
     {
         try {
 
-            $peace = $this->peaceRepository->find($id, [
-                'id',
-                'code',
-                'name',
-                'description',
-                'stock_quantity',
-                'minimal_quantity',
-            ]);
+            $peace = $this->peaceRepository
+                ->with([
+                    'maintenance' => function ($query) {
+                        $query->select('id', 'machine_id', 'review_type_id');
+                    },
+                ])
+                ->find($id, [
+                    'id',
+                    'code',
+                    'name',
+                    'description',
+                    'stock_quantity',
+                    'minimal_quantity',
+                ]);
 
             return (new PeaceResponse($peace))
                 ->response()

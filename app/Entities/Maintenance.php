@@ -45,4 +45,14 @@ class Maintenance extends Model
         return $this->belongsTo(ReviewType::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function peaces()
+    {
+        return $this->belongsToMany(Peace::class, 'maintenance_peaces', 'maintenance_id', 'peace_id')
+            ->withPivot('amount_used')
+            ->withTimestamps();
+    }
+
 }

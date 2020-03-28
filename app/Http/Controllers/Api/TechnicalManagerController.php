@@ -96,6 +96,8 @@ class TechnicalManagerController extends Controller
                 'id',
                 'name',
                 'email',
+                'telephone',
+                'additional',
             ]);
 
             return (new UserResponse($user))
