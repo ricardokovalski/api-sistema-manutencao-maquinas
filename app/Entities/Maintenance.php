@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Maintenance extends Model
 {
+    public $table = 'maintenance';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -26,5 +28,21 @@ class Maintenance extends Model
         'created_at',
         'updated_at',
     ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function machine()
+    {
+        return $this->belongsTo(Machine::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function reviewType()
+    {
+        return $this->belongsTo(ReviewType::class);
+    }
 
 }
