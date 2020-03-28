@@ -26,6 +26,15 @@ class PermissionRepository implements PermissionRepositoryContract
     }
 
     /**
+     * @param array $columns
+     * @return \Illuminate\Database\Eloquent\Collection|Permission[]
+     */
+    public function all(array $columns = ['*'])
+    {
+        return $this->model::all($columns);
+    }
+
+    /**
      * @param array $attributes
      * @return \Spatie\Permission\Contracts\Permission
      */
