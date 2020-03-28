@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Eloquent\Model;
 
 class UserTableSeeder extends Seeder
 {
@@ -11,6 +12,10 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
+        Model::unguard();
+
         factory(App\Entities\User::class, 30)->create();
+
+        Model::reguard();
     }
 }
