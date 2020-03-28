@@ -28,6 +28,7 @@ Route::post('auth/login', 'Api\AuthController@login');
     Route::post('auth/me', 'Api\AuthController@me');
 
     Route::resource('users', 'Api\UserController')->except('create', 'edit');
+    Route::resource('technical-manager', 'Api\TechnicalManagerController')->except('create', 'edit');
     Route::resource('machines', 'Api\MachineController')->except('create', 'edit');
     Route::resource('roles', 'Api\RoleController')->except('create', 'edit', 'update', 'destroy');
     Route::resource('permissions', 'Api\PermissionController')->except('create', 'edit', 'update', 'destroy');

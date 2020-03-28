@@ -3,8 +3,10 @@
 namespace App\Repositories\Users;
 
 use App\Entities\User;
+use App\Repositories\Contracts\RoleRepositoryContract;
 use App\Repositories\Contracts\UserRepositoryContract;
 //use Prettus\Repository\Criteria\RequestCriteria;
+use App\Repositories\Roles\RoleRepository;
 use Prettus\Repository\Eloquent\BaseRepository;
 
 /**
@@ -27,4 +29,9 @@ class UserRepository extends BaseRepository implements UserRepositoryContract
     {
         $this->pushCriteria(app(RequestCriteria::class));
     }*/
+
+    public function getTechnicalManagers(array $columns = ['*'])
+    {
+        return $this->model::role(app(RoleRepository::class)->findById(3, ['name'])->name);
+    }
 }

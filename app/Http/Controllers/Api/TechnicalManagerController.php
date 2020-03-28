@@ -10,10 +10,10 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 /**
- * Class UserController
+ * Class TechnicalManagerController
  * @package App\Http\Controllers\Api
  */
-class UserController extends Controller
+class TechnicalManagerController extends Controller
 {
     /**
      * @var UserRepositoryContract
@@ -40,11 +40,13 @@ class UserController extends Controller
     {
         try {
 
-            $users = $this->userRepository->all([
+            $users = $this->userRepository->getTechnicalManagers([
                 'id',
                 'name',
                 'email',
-            ]);
+                'telephone',
+                'additional',
+            ])->get();
 
             return (new UserResponse($users))
                 ->response()

@@ -50,10 +50,7 @@ class PermissionRepository implements PermissionRepositoryContract
      */
     public function findById(int $id, array $columns = ['*']): \Spatie\Permission\Contracts\Permission
     {
-        return $this->model::findById($id)
-            ->take(1)
-            ->get($columns)
-            ->first();
+        return $this->model::find($id, $columns);
     }
 
     /**

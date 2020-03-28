@@ -10,5 +10,5 @@ use Prettus\Repository\Contracts\RepositoryInterface;
  */
 interface UserRepositoryContract extends RepositoryInterface
 {
-    //
+    public function getTechnicalManagers(array $columns = ['*']);
 }

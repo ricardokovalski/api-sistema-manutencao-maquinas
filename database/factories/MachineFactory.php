@@ -10,7 +10,7 @@ $factory->define(Machine::class, function (Faker $faker) {
         'name' => $faker->word,
         'description' => $faker->text,
         'technical' => $faker->text,
-        'patrimony' => $faker->text,
+        'patrimony' => $faker->currencyCode,
         'review_period' => $faker->numberBetween(1, 5),
         'warning_period' => $faker->numberBetween(1, 5),
         'warning_email_address' => $faker->email,
