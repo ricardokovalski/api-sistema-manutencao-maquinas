@@ -40,16 +40,20 @@ class MachineController extends Controller
     {
         try {
 
-            $machines = $this->machineRepository->all([
-                'id',
-                'name',
-                'description',
-                'technical',
-                'patrimony',
-                'review_period',
-                'warning_period',
-                'warning_email_address',
-            ]);
+            $machines = $this->machineRepository
+                ->with(['users' => function ($query) {
+                    $query->select('id', 'name');
+                }])
+                ->all([
+                    'id',
+                    'name',
+                    'description',
+                    'technical',
+                    'patrimony',
+                    'review_period',
+                    'warning_period',
+                    'warning_email_address',
+                ]);
 
             return (new MachineResponse($machines))
                 ->response()
@@ -95,15 +99,20 @@ class MachineController extends Controller
     {
         try {
 
-            $machine = $this->machineRepository->find($id, [
-                'name',
-                'description',
-                'technical',
-                'patrimony',
-                'review_period',
-                'warning_period',
-                'warning_email_address',
-            ]);
+            $machine = $this->machineRepository
+                ->with(['users' => function ($query) {
+                    $query->select('id', 'name');
+                }])
+                ->find($id, [
+                    'id',
+                    'name',
+                    'description',
+                    'technical',
+                    'patrimony',
+                    'review_period',
+                    'warning_period',
+                    'warning_email_address',
+                ]);
 
             return (new MachineResponse($machine))
                 ->response()

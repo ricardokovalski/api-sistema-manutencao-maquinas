@@ -40,13 +40,18 @@ class TechnicalManagerController extends Controller
     {
         try {
 
-            $users = $this->userRepository->getTechnicalManagers([
-                'id',
-                'name',
-                'email',
-                'telephone',
-                'additional',
-            ])->get();
+            $users = $this->userRepository
+                ->getTechnicalManagers([
+                    'id',
+                    'name',
+                    'email',
+                    'telephone',
+                    'additional',
+                ])
+                ->with(['machines' => function ($query) {
+                    $query->select('id', 'name');
+                }])
+                ->get();
 
             return (new UserResponse($users))
                 ->response()
@@ -92,13 +97,17 @@ class TechnicalManagerController extends Controller
     {
         try {
 
-            $user = $this->userRepository->find($id, [
-                'id',
-                'name',
-                'email',
-                'telephone',
-                'additional',
-            ]);
+            $user = $this->userRepository
+                ->with(['machines' => function ($query) {
+                    $query->select('id', 'name');
+                }])
+                ->find($id, [
+                    'id',
+                    'name',
+                    'email',
+                    'telephone',
+                    'additional',
+                ]);
 
             return (new UserResponse($user))
                 ->response()
