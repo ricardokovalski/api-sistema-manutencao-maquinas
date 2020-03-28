@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Entities\User;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserRequest;
 use App\Repositories\Contracts\UserRepositoryContract;
 use App\Http\Resources\UserResponse;
 use Illuminate\Http\JsonResponse;
@@ -60,10 +62,10 @@ class UserController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param UserRequest $request
+     * @return JsonResponse
      */
-    public function store(Request $request): JsonResponse
+    public function store(UserRequest $request): JsonResponse
     {
         try {
 
@@ -110,11 +112,11 @@ class UserController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param UserRequest $request
      * @param int $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function update(Request $request, int $id): JsonResponse
+    public function update(UserRequest $request, int $id): JsonResponse
     {
         try {
 

@@ -3,12 +3,17 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\MachineRequest;
 use App\Repositories\Contracts\MachineRepositoryContract;
 use App\Http\Resources\MachineResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
+/**
+ * Class MachineController
+ * @package App\Http\Controllers\Api
+ */
 class MachineController extends Controller
 {
     /**
@@ -61,10 +66,10 @@ class MachineController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param MachineRequest $request
      * @return JsonResponse
      */
-    public function store(Request $request): JsonResponse
+    public function store(MachineRequest $request): JsonResponse
     {
         try {
 
@@ -115,11 +120,11 @@ class MachineController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param MachineRequest $request
      * @param $id
      * @return JsonResponse
      */
-    public function update(Request $request, $id): JsonResponse
+    public function update(MachineRequest $request, $id): JsonResponse
     {
         try {
 
