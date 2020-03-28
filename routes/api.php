@@ -27,10 +27,11 @@ Route::post('auth/login', 'Api\AuthController@login');
     Route::post('auth/refresh', 'Api\AuthController@refresh');
     Route::post('auth/me', 'Api\AuthController@me');
 
-    Route::resource('users', 'Api\UserController')->except('create', 'edit');
-    Route::resource('technical-manager', 'Api\TechnicalManagerController')->except('create', 'edit');
     Route::resource('machines', 'Api\MachineController')->except('create', 'edit');
+    //Route::resource('movements', 'Api\MovementsController')->except('create', 'edit');
     Route::resource('peaces', 'Api\PeaceController')->except('create', 'edit');
-    Route::resource('roles', 'Api\RoleController')->except('create', 'edit', 'update', 'destroy');
     Route::resource('permissions', 'Api\PermissionController')->except('create', 'edit', 'update', 'destroy');
+    Route::resource('roles', 'Api\RoleController')->except('create', 'edit', 'update', 'destroy');
+    Route::resource('technical-manager', 'Api\TechnicalManagerController')->except('create', 'edit');
+    Route::resource('users', 'Api\UserController')->except('create', 'edit');
 /*});*/

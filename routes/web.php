@@ -38,7 +38,7 @@ Route::get('/', function (\App\Repositories\Roles\RoleRepository $repository) {
     dump($user->getRoleNames());
     dd($user->hasPermissionTo($permission->id));*/
 
-    dd($repository->findById(1));
+    //dd($repository->findById(1));
 
     return view('welcome');
 });
