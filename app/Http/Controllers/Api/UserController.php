@@ -50,7 +50,13 @@ class UserController extends Controller
     {
         try {
 
-            $users = $this->userRepository->getAllUsers([
+            /*$users = $this->userRepository->getAllUsers([
+                'id',
+                'name',
+                'email',
+            ]);*/
+
+            $users = $this->userRepository->all([
                 'id',
                 'name',
                 'email',
