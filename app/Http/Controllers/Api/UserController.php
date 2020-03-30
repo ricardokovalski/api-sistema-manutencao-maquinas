@@ -69,6 +69,7 @@ class UserController extends Controller
 
             $user = $this->userRepository->create($request->all());
 
+
             return (new UserResponse($user))
                 ->response()
                 ->setStatusCode(Response::HTTP_CREATED);
