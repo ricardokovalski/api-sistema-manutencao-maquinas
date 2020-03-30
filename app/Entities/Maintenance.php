@@ -21,6 +21,7 @@ class Maintenance extends Model
         'machine_id',
         'review_type_id',
         'description',
+        'review_at',
     ];
 
     protected $dates = [

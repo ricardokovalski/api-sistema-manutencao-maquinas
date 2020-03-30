@@ -67,8 +67,8 @@ class UserController extends Controller
     {
         try {
 
+            //Todo: Fazer o vículo do profile_id so usuário pela tabela Users.
             $user = $this->userRepository->create($request->all());
-
 
             return (new UserResponse($user))
                 ->response()
