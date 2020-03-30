@@ -28,8 +28,11 @@ Route::group([
     Route::post('auth/me', 'Api\AuthController@me');
 
     Route::resource('machines', 'Api\MachineController')->except('create', 'edit');
+    Route::post('machines/technical-manager', 'Api\MachineController@assignUser');
+
     Route::resource('maintenance', 'Api\MaintenanceController')->except('create', 'edit');
     Route::resource('pieces', 'Api\PeaceController')->except('create', 'edit');
+    Route::resource('review-types', 'Api\ReviewTypeController')->except('create', 'store', 'show', 'edit', 'update', 'destroy');
     Route::resource('permissions', 'Api\PermissionController')->except('create', 'edit', 'update', 'destroy');
     Route::resource('roles', 'Api\RoleController')->except('create', 'edit', 'update', 'destroy');
     Route::resource('technical-managers', 'Api\TechnicalManagerController')->except('create', 'edit');

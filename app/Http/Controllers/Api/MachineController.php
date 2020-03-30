@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Repositories\Contracts\MachineRepositoryContract;
 use App\Http\Resources\MachineResponse;
+use App\Repositories\Contracts\UserRepositoryContract;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -21,16 +22,21 @@ class MachineController extends Controller
     protected $machineRepository;
 
     /**
+     * @var UserRepositoryContract
+     */
+    protected $userRepository;
+
+    /**
      * MachineController constructor.
      * @param MachineRepositoryContract $machineRepository
+     * @param UserRepositoryContract $userRepository
      */
-    public function __construct(MachineRepositoryContract $machineRepository)
-    {
-        /*$this->middleware('auth:api', [
-            'except' => ['store']
-        ]);*/
-
+    public function __construct(
+        MachineRepositoryContract $machineRepository,
+        UserRepositoryContract $userRepository
+    ) {
         $this->machineRepository = $machineRepository;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -181,6 +187,39 @@ class MachineController extends Controller
             $machine->users()->detach();
 
             $this->machineRepository->delete($id);
+
+            return response()->json(true, Response::HTTP_OK);
+
+        } catch (\Exception $exception) {
+
+            return response()->json([
+                'error' => $exception->getMessage()
+            ], Response::HTTP_BAD_REQUEST);
+
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function assignUser(Request $request): JsonResponse
+    {
+        try {
+
+            $machine = $this->machineRepository->find($request->get('machine_id'));
+
+            if (! $machine) {
+                throw new \Exception('Máquina não encontrada.', Response::HTTP_NOT_FOUND);
+            }
+
+            $user = $this->userRepository->find($request->get('user_id'));
+
+            if (! $user) {
+                throw new \Exception('Usuário não encontrado.', Response::HTTP_NOT_FOUND);
+            }
+
+            $machine->users()->attach([$user]);
 
             return response()->json(true, Response::HTTP_OK);
 
