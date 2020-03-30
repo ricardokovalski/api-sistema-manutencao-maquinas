@@ -19,9 +19,9 @@ use Illuminate\Http\Request;
 
 Route::post('auth/login', 'Api\AuthController@login');
 
-/*Route::group([
-    'middleware' => 'jwt.verify',
-], function () {*/
+Route::group([
+    'middleware' => 'cross.domain',
+], function () {
 
     Route::post('auth/logout', 'Api\AuthController@logout');
     Route::post('auth/refresh', 'Api\AuthController@refresh');
@@ -29,9 +29,9 @@ Route::post('auth/login', 'Api\AuthController@login');
 
     Route::resource('machines', 'Api\MachineController')->except('create', 'edit');
     Route::resource('maintenance', 'Api\MaintenanceController')->except('create', 'edit');
-    Route::resource('peaces', 'Api\PeaceController')->except('create', 'edit');
+    Route::resource('pieces', 'Api\PeaceController')->except('create', 'edit');
     Route::resource('permissions', 'Api\PermissionController')->except('create', 'edit', 'update', 'destroy');
     Route::resource('roles', 'Api\RoleController')->except('create', 'edit', 'update', 'destroy');
-    Route::resource('technical-manager', 'Api\TechnicalManagerController')->except('create', 'edit');
+    Route::resource('technical-managers', 'Api\TechnicalManagerController')->except('create', 'edit');
     Route::resource('users', 'Api\UserController')->except('create', 'edit');
-/*});*/
+});
