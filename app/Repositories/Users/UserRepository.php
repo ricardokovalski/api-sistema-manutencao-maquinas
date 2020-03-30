@@ -43,11 +43,13 @@ class UserRepository extends BaseRepository implements UserRepositoryContract
      */
     public function getAllUsers(array $columns = ['*'])
     {
-        return $this->model::role([
-            \App\Domain\Roles::ADMINISTRATOR,
-            \App\Domain\Roles::EMPLOYEE,
-            \App\Domain\Roles::VISITOR
-        ])->get($columns);
+        return $this->withRoles(
+            $this->model::role([
+                \App\Domain\Roles::ADMINISTRATOR,
+                \App\Domain\Roles::EMPLOYEE,
+                \App\Domain\Roles::VISITOR
+            ])
+        )->get($columns);
     }
 
     /**
@@ -57,6 +59,13 @@ class UserRepository extends BaseRepository implements UserRepositoryContract
     private function withMachines(Builder $model)
     {
         return $model->with(['machines' => function ($query) {
+            $query->select('id', 'name');
+        }]);
+    }
+
+    private function withRoles(Builder $model)
+    {
+        return $model->with(['roles' => function ($query) {
             $query->select('id', 'name');
         }]);
     }

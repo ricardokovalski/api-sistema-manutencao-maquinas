@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\Contracts\RoleRepositoryContract;
 use App\Repositories\Contracts\UserRepositoryContract;
 use App\Http\Resources\UserResponse;
 use Illuminate\Http\JsonResponse;
@@ -21,16 +22,25 @@ class UserController extends Controller
     protected $userRepository;
 
     /**
+     * @var RoleRepositoryContract
+     */
+    protected $roleRepository;
+
+    /**
      * UserController constructor.
      * @param UserRepositoryContract $userRepository
+     * @param RoleRepositoryContract $roleRepository
      */
-    public function __construct(UserRepositoryContract $userRepository)
-    {
+    public function __construct(
+        UserRepositoryContract $userRepository,
+        RoleRepositoryContract $roleRepository
+    ) {
         /*$this->middleware('auth:api', [
             'except' => ['store']
         ]);*/
 
         $this->userRepository = $userRepository;
+        $this->roleRepository = $roleRepository;
     }
 
     /**
@@ -67,8 +77,15 @@ class UserController extends Controller
     {
         try {
 
-            //Todo: Fazer o vículo do profile_id so usuário pela tabela Users.
             $user = $this->userRepository->create($request->all());
+
+            $role = $this->roleRepository->findById($request->get('profile_id'));
+
+            if (! $role) {
+                throw new \Exception('Perfil não encontrado!', Response::HTTP_NOT_FOUND);
+            }
+
+            $user->assignRole($request->get('profile_id'));
 
             return (new UserResponse($user))
                 ->response()
@@ -91,11 +108,16 @@ class UserController extends Controller
     {
         try {
 
-            $user = $this->userRepository->find($id, [
-                'id',
-                'name',
-                'email',
-            ]);
+            $user = $this->userRepository
+                ->with([
+                    'roles' => function ($query) {
+                        $query->select('id', 'name');
+                    }
+                ])->find($id, [
+                    'id',
+                    'name',
+                    'email',
+                ]);
 
             return (new UserResponse($user))
                 ->response()
@@ -124,6 +146,14 @@ class UserController extends Controller
                 $id
             );
 
+            $role = $this->roleRepository->findById($request->get('profile_id'));
+
+            if (! $role) {
+                throw new \Exception('Perfil não encontrado!', Response::HTTP_NOT_FOUND);
+            }
+
+            $user->assignRole($request->get('profile_id'));
+
             return (new UserResponse($user))
                 ->response()
                 ->setStatusCode(Response::HTTP_OK);
@@ -144,6 +174,10 @@ class UserController extends Controller
     public function destroy(int $id): JsonResponse
     {
         try {
+
+            $user = $this->userRepository->find($id);
+
+            $user->roles()->detach();
 
             $this->userRepository->delete($id);
 
