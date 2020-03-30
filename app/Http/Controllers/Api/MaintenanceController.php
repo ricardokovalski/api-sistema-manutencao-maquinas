@@ -159,9 +159,13 @@ class MaintenanceController extends Controller
     {
         try {
 
-            return response()->json([
-                'data' => $this->maintenanceRepository->delete($id)
-            ], Response::HTTP_OK);
+            $maintenance = $this->maintenanceRepository->find($id);
+
+            $maintenance->peaces()->detach();
+
+            $this->maintenanceRepository->delete($id);
+
+            return response()->json(true, Response::HTTP_OK);
 
         } catch (\Exception $exception) {
 

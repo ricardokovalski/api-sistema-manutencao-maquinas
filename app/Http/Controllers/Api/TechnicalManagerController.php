@@ -47,11 +47,7 @@ class TechnicalManagerController extends Controller
                     'email',
                     'telephone',
                     'additional',
-                ])
-                ->with(['machines' => function ($query) {
-                    $query->select('id', 'name');
-                }])
-                ->get();
+                ]);
 
             return (new UserResponse($users))
                 ->response()
@@ -157,9 +153,13 @@ class TechnicalManagerController extends Controller
     {
         try {
 
-            return response()->json([
-                'data' => $this->userRepository->delete($id)
-            ], Response::HTTP_OK);
+            $technical = $this->userRepository->find($id);
+
+            $technical->machines()->detach();
+
+            $this->userRepository->delete($id);
+
+            return response()->json(true, Response::HTTP_OK);
 
         } catch (\Exception $exception) {
 

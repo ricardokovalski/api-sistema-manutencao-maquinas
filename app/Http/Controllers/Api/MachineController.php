@@ -41,9 +41,14 @@ class MachineController extends Controller
         try {
 
             $machines = $this->machineRepository
-                ->with(['users' => function ($query) {
-                    $query->select('id', 'name');
-                }])
+                ->with([
+                    'users' => function ($query) {
+                        $query->select('id', 'name');
+                    },
+                    'maintenance' => function ($query) {
+                        $query->select('id', 'machine_id', 'review_type_id', 'review_at');
+                    },
+                ])
                 ->all([
                     'id',
                     'name',
@@ -100,9 +105,14 @@ class MachineController extends Controller
         try {
 
             $machine = $this->machineRepository
-                ->with(['users' => function ($query) {
-                    $query->select('id', 'name');
-                }])
+                ->with([
+                    'users' => function ($query) {
+                        $query->select('id', 'name');
+                    },
+                    'maintenance' => function ($query) {
+                        $query->select('id', 'machine_id', 'review_type_id', 'review_at');
+                    },
+                ])
                 ->find($id, [
                     'id',
                     'name',
@@ -162,9 +172,17 @@ class MachineController extends Controller
     {
         try {
 
-            return response()->json([
-                'data' => $this->machineRepository->delete($id)
-            ], Response::HTTP_OK);
+            $machine = $this->machineRepository->find($id);
+
+            if ($machine->maintenance->pluck('id')) {
+                throw new \Exception('Não é possível remover está máquina, pois existem manutenções vinculadas à está máquina.', Response::HTTP_NOT_FOUND);
+            }
+
+            $machine->users()->detach();
+
+            $this->machineRepository->delete($id);
+
+            return response()->json(true, Response::HTTP_OK);
 
         } catch (\Exception $exception) {
 

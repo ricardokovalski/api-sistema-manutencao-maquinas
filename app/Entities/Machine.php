@@ -36,4 +36,9 @@ class Machine extends Model
     {
         return $this->belongsToMany(User::class, 'machine_users', 'machine_id', 'user_id');
     }
+
+    public function maintenance()
+    {
+        return $this->hasMany(Maintenance::class);
+    }
 }

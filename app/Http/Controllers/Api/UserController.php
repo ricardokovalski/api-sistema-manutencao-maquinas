@@ -40,7 +40,7 @@ class UserController extends Controller
     {
         try {
 
-            $users = $this->userRepository->all([
+            $users = $this->userRepository->getAllUsers([
                 'id',
                 'name',
                 'email',
@@ -144,9 +144,9 @@ class UserController extends Controller
     {
         try {
 
-            return response()->json([
-                'data' => $this->userRepository->delete($id)
-            ], Response::HTTP_OK);
+            $this->userRepository->delete($id);
+
+            return response()->json(true, Response::HTTP_OK);
 
         } catch (\Exception $exception) {
 

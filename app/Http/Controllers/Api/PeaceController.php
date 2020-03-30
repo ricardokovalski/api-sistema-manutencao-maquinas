@@ -158,9 +158,13 @@ class PeaceController extends Controller
     {
         try {
 
-            return response()->json([
-                'data' => $this->peaceRepository->delete($id)
-            ], Response::HTTP_OK);
+            $peace = $this->peaceRepository->find($id);
+
+            $peace->maintenance()->detach();
+
+            $this->peaceRepository->delete($id);
+
+            return response()->json(true, Response::HTTP_OK);
 
         } catch (\Exception $exception) {
 
