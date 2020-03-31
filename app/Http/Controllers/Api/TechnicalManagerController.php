@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\Contracts\RoleRepositoryContract;
 use App\Repositories\Contracts\UserRepositoryContract;
 use App\Http\Resources\UserResponse;
 use Illuminate\Http\JsonResponse;
@@ -21,16 +22,25 @@ class TechnicalManagerController extends Controller
     protected $userRepository;
 
     /**
+     * @var RoleRepositoryContract
+     */
+    protected $roleRepository;
+
+    /**
      * UserController constructor.
      * @param UserRepositoryContract $userRepository
+     * @param RoleRepositoryContract $roleRepository
      */
-    public function __construct(UserRepositoryContract $userRepository)
-    {
+    public function __construct(
+        UserRepositoryContract $userRepository,
+        RoleRepositoryContract $roleRepository
+    ) {
         /*$this->middleware('auth:api', [
             'except' => ['store']
         ]);*/
 
         $this->userRepository = $userRepository;
+        $this->roleRepository = $roleRepository;
     }
 
     /**
@@ -71,6 +81,14 @@ class TechnicalManagerController extends Controller
         try {
 
             $user = $this->userRepository->create($request->all());
+
+            $role = $this->roleRepository->findById($request->get('profile_id'));
+
+            if (! $role) {
+                throw new \Exception('Perfil não encontrado!', Response::HTTP_NOT_FOUND);
+            }
+
+            $user->assignRole($request->get('profile_id'));
 
             return (new UserResponse($user))
                 ->response()
@@ -131,6 +149,14 @@ class TechnicalManagerController extends Controller
                 $request->all(),
                 $id
             );
+
+            $role = $this->roleRepository->findById($request->get('profile_id'));
+
+            if (! $role) {
+                throw new \Exception('Perfil não encontrado!', Response::HTTP_NOT_FOUND);
+            }
+
+            $user->assignRole($request->get('profile_id'));
 
             return (new UserResponse($user))
                 ->response()
