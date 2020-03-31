@@ -19,9 +19,9 @@ use Illuminate\Http\Request;
 
 Route::post('auth/login', 'Api\AuthController@login');
 
-Route::group([
-    'middleware' => 'cross.domain',
-], function () {
+/*Route::group([
+    'middleware' => '',
+], function () {*/
 
     Route::post('auth/logout', 'Api\AuthController@logout');
     Route::post('auth/refresh', 'Api\AuthController@refresh');
@@ -37,4 +37,4 @@ Route::group([
     Route::resource('roles', 'Api\RoleController')->except('create', 'edit', 'update', 'destroy');
     Route::resource('technical-managers', 'Api\TechnicalManagerController')->except('create', 'edit');
     Route::resource('users', 'Api\UserController')->except('create', 'edit');
-});
+//});
