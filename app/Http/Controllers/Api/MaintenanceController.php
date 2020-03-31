@@ -74,7 +74,18 @@ class MaintenanceController extends Controller
     {
         try {
 
-            $maintenance = $this->maintenanceRepository->create($request->all());
+            $data = $request->only(
+                'description',
+                'review_type_id',
+                'machine_id',
+                'review_at'
+            );
+
+            $maintenance = $this->maintenanceRepository->create($data);
+
+            $maintenance->peaces()->attach($request->get('piece_id'), [
+                'amount_used' => $request->get('amount_used'),
+            ]);
 
             return (new MaintenanceResponse($maintenance))
                 ->response()
