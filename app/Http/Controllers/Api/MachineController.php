@@ -55,6 +55,7 @@ class MachineController extends Controller
                         $query->select('id', 'machine_id', 'review_type_id', 'review_at');
                     },
                 ])
+                ->orderBy('name', 'asc')
                 ->all([
                     'id',
                     'name',

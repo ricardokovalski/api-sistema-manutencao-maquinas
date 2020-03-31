@@ -42,6 +42,7 @@ class PeaceController extends Controller
                         $query->select('id', 'machine_id', 'review_type_id');
                     },
                 ])
+                ->orderBy('code', 'asc')
                 ->all([
                     'id',
                     'code',

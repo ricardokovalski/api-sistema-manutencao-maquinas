@@ -34,7 +34,9 @@ class UserRepository extends BaseRepository implements UserRepositoryContract
      */
     public function getTechnicalManagers(array $columns = ['*'])
     {
-        return $this->withMachines($this->model::role(\App\Domain\Roles::TECHNICAL))->get($columns);
+        return $this->withMachines($this->model::role(\App\Domain\Roles::TECHNICAL))
+            ->orderBy('name', 'asc')
+            ->get($columns);
     }
 
     /**
@@ -43,13 +45,15 @@ class UserRepository extends BaseRepository implements UserRepositoryContract
      */
     public function getAllUsers(array $columns = ['*'])
     {
-        return $this->withRoles(
-            $this->model::role([
-                \App\Domain\Roles::ADMINISTRATOR,
-                \App\Domain\Roles::EMPLOYEE,
-                \App\Domain\Roles::VISITOR
-            ])
-        )->get($columns);
+        $roles = [
+            \App\Domain\Roles::ADMINISTRATOR,
+            \App\Domain\Roles::EMPLOYEE,
+            \App\Domain\Roles::VISITOR
+        ];
+
+        return $this->withRoles($this->model::role($roles))
+            ->orderBy('name', 'asc')
+            ->get($columns);
     }
 
     /**
@@ -63,6 +67,10 @@ class UserRepository extends BaseRepository implements UserRepositoryContract
         }]);
     }
 
+    /**
+     * @param Builder $model
+     * @return Builder
+     */
     private function withRoles(Builder $model)
     {
         return $model->with(['roles' => function ($query) {

@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Repositories\Contracts\MaintenanceRepositoryContract;
 use App\Http\Resources\MaintenanceResponse;
+use App\Repositories\Maintenance\Criteria\JoinMachinesCriteria;
+use App\Repositories\Maintenance\Criteria\OrderByMachinesCriteria;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -30,6 +32,8 @@ class MaintenanceController extends Controller
         try {
 
             $maintenance = $this->maintenanceRepository
+                ->pushCriteria(new JoinMachinesCriteria())
+                ->pushCriteria(new OrderByMachinesCriteria())
                 ->with([
                     'machine' => function ($query) {
                         $query->select('id', 'name');
@@ -42,11 +46,11 @@ class MaintenanceController extends Controller
                     },
                 ])
                 ->all([
-                    'id',
-                    'machine_id',
-                    'review_type_id',
-                    'description',
-                    'review_at',
+                    'maintenance.id',
+                    'maintenance.machine_id',
+                    'maintenance.review_type_id',
+                    'maintenance.description',
+                    'maintenance.review_at',
                 ]);
 
             return (new MaintenanceResponse($maintenance))
