@@ -49,7 +49,7 @@ class Maintenance extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function peaces()
+    public function pieces()
     {
         return $this->belongsToMany(Peace::class, 'maintenance_peaces', 'maintenance_id', 'peace_id')
             ->withPivot('amount_used')

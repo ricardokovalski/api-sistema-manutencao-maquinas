@@ -48,7 +48,7 @@ class MaintenanceController extends Controller
                     'reviewType' => function ($query) {
                         $query->select('id', 'name');
                     },
-                    'peaces' => function ($query) {
+                    'pieces' => function ($query) {
                         $query->select('id', 'name');
                     },
                 ])
@@ -122,7 +122,7 @@ class MaintenanceController extends Controller
                 'reviewType' => function ($query) {
                     $query->select('id', 'name');
                 },
-                'peaces' => function ($query) {
+                'pieces' => function ($query) {
                     $query->select('id', 'name');
                 },
             ])->find($id, [
