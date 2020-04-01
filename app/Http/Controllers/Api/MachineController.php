@@ -58,13 +58,13 @@ class MachineController extends Controller
             $machines = $this->machineRepository
                 ->with([
                     'users' => function ($query) {
-                        $query->select('id', 'name');
+                        $query->select('id', 'name', 'email', 'telephone', 'additional');
                     },
                     'maintenance' => function ($query) {
                         $query->select('id', 'machine_id', 'review_type_id', 'review_at');
                     },
                     'pieces' => function ($query) {
-                        $query->select('id', 'code', 'name');
+                        $query->select('id', 'code', 'name', 'description', 'stock_quantity', 'minimal_quantity');
                     },
                 ])
                 ->orderBy('name', 'asc')
@@ -126,13 +126,13 @@ class MachineController extends Controller
             $machine = $this->machineRepository
                 ->with([
                     'users' => function ($query) {
-                        $query->select('id', 'name');
+                        $query->select('id', 'name', 'email', 'telephone', 'additional');
                     },
                     'maintenance' => function ($query) {
                         $query->select('id', 'machine_id', 'review_type_id', 'review_at');
                     },
                     'pieces' => function ($query) {
-                        $query->select('id', 'code', 'name');
+                        $query->select('id', 'code', 'name', 'description', 'stock_quantity', 'minimal_quantity');
                     },
                 ])
                 ->find($id, [
