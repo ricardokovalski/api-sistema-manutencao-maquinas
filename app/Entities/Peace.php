@@ -38,4 +38,14 @@ class Peace extends Model
             ->withPivot('amount_used')
             ->withTimestamps();
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function machines()
+    {
+        return $this->belongsToMany(Machine::class, 'machine_pieces', 'piece_id', 'machine_id')
+            ->withPivot('minimal_quantity')
+            ->withTimestamps();
+    }
 }

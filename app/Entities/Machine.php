@@ -37,8 +37,21 @@ class Machine extends Model
         return $this->belongsToMany(User::class, 'machine_users', 'machine_id', 'user_id');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function maintenance()
     {
         return $this->hasMany(Maintenance::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function pieces()
+    {
+        return $this->belongsToMany(Peace::class, 'machine_pieces', 'machine_id', 'piece_id')
+            ->withPivot('minimal_quantity')
+            ->withTimestamps();
     }
 }

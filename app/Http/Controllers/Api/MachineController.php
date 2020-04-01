@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Repositories\Contracts\MachineRepositoryContract;
 use App\Http\Resources\MachineResponse;
+use App\Repositories\Contracts\PeaceRepositoryContract;
 use App\Repositories\Contracts\UserRepositoryContract;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -27,16 +28,24 @@ class MachineController extends Controller
     protected $userRepository;
 
     /**
+     * @var PeaceRepositoryContract
+     */
+    protected $peaceRepository;
+
+    /**
      * MachineController constructor.
      * @param MachineRepositoryContract $machineRepository
      * @param UserRepositoryContract $userRepository
+     * @param PeaceRepositoryContract $peaceRepository
      */
     public function __construct(
         MachineRepositoryContract $machineRepository,
-        UserRepositoryContract $userRepository
+        UserRepositoryContract $userRepository,
+        PeaceRepositoryContract $peaceRepository
     ) {
         $this->machineRepository = $machineRepository;
         $this->userRepository = $userRepository;
+        $this->peaceRepository = $peaceRepository;
     }
 
     /**
@@ -53,6 +62,9 @@ class MachineController extends Controller
                     },
                     'maintenance' => function ($query) {
                         $query->select('id', 'machine_id', 'review_type_id', 'review_at');
+                    },
+                    'pieces' => function ($query) {
+                        $query->select('id', 'code', 'name');
                     },
                 ])
                 ->orderBy('name', 'asc')
@@ -118,6 +130,9 @@ class MachineController extends Controller
                     },
                     'maintenance' => function ($query) {
                         $query->select('id', 'machine_id', 'review_type_id', 'review_at');
+                    },
+                    'pieces' => function ($query) {
+                        $query->select('id', 'code', 'name');
                     },
                 ])
                 ->find($id, [
@@ -208,19 +223,80 @@ class MachineController extends Controller
     {
         try {
 
-            $machine = $this->machineRepository->find($request->get('machine_id'));
+            $machine = $this->machineRepository
+                ->findByField('id', $request->get('machine_id'))
+                ->first();
 
             if (! $machine) {
                 throw new \Exception('Máquina não encontrada.', Response::HTTP_NOT_FOUND);
             }
 
-            $user = $this->userRepository->find($request->get('user_id'));
+            $user = $this->userRepository
+                ->findByField('id', $request->get('user_id'))
+                ->first();
 
             if (! $user) {
                 throw new \Exception('Usuário não encontrado.', Response::HTTP_NOT_FOUND);
             }
 
-            $machine->users()->attach([$user]);
+            $machineWithUser = $machine->whereHas('users', function ($query) use ($user, $machine) {
+                return $query->where('machine_users.user_id', $user->id)
+                    ->where('machine_users.machine_id', $machine->id);
+            })->first();
+
+            if ($machineWithUser) {
+                throw new \Exception('Esta máquina já possui esse Responsável Técnico vinculado!', Response::HTTP_NOT_FOUND);
+            }
+
+            $machine->users()->attach($user);
+
+            return response()->json(true, Response::HTTP_OK);
+
+        } catch (\Exception $exception) {
+
+            return response()->json([
+                'error' => $exception->getMessage()
+            ], Response::HTTP_BAD_REQUEST);
+
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function assignPiece(Request $request): JsonResponse
+    {
+        try {
+
+            $machine = $this->machineRepository
+                ->findByField('id', $request->get('machine_id'))
+                ->first();
+
+            if (! $machine) {
+                throw new \Exception('Máquina não encontrada.', Response::HTTP_NOT_FOUND);
+            }
+
+            $piece = $this->peaceRepository
+                ->findByField('id', $request->get('piece_id'))
+                ->first();
+
+            if (! $piece) {
+                throw new \Exception('Peça não encontrada.', Response::HTTP_NOT_FOUND);
+            }
+
+            $machineWithPiece = $machine->whereHas('pieces', function ($query) use ($piece, $machine) {
+                return $query->where('machine_pieces.piece_id', $piece->id)
+                    ->where('machine_pieces.machine_id', $machine->id);
+            })->first();
+
+            if ($machineWithPiece) {
+                throw new \Exception('Esta máquina já possui essa peça de reposição!', Response::HTTP_NOT_FOUND);
+            }
+
+            $machine->pieces()->attach($piece, [
+                'minimal_quantity' => $request->get('minimal_quantity'),
+            ]);
 
             return response()->json(true, Response::HTTP_OK);
 
