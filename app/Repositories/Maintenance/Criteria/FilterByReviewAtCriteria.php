@@ -19,11 +19,11 @@ class FilterByReviewAtCriteria implements CriteriaInterface
 
     /**
      * FilterByReviewAtCriteria constructor.
-     * @param $startDate
-     * @param $endDate
+     * @param null $startDate
+     * @param null $endDate
      * @param string $column
      */
-    public function __construct($startDate, $endDate, $column = 'review_at')
+    public function __construct($startDate = null, $endDate = null, $column = 'review_at')
     {
         $this->startDate = $startDate;
         $this->endDate = $endDate;
