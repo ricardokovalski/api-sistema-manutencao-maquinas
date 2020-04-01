@@ -58,25 +58,38 @@ class MachineController extends Controller
             $machines = $this->machineRepository
                 ->with([
                     'users' => function ($query) {
-                        $query->select('id', 'name', 'email', 'telephone', 'additional');
+                        $query->select(
+                            'users.id',
+                            'users.name',
+                            'users.email',
+                            'users.telephone',
+                            'users.additional'
+                        );
                     },
                     'maintenance' => function ($query) {
                         $query->select('id', 'machine_id', 'review_type_id', 'review_at');
                     },
                     'pieces' => function ($query) {
-                        $query->select('id', 'code', 'name', 'description', 'stock_quantity', 'minimal_quantity');
+                        $query->select(
+                            'peaces.id',
+                            'peaces.code',
+                            'peaces.name',
+                            'peaces.description',
+                            'peaces.stock_quantity',
+                            'peaces.minimal_quantity'
+                        );
                     },
                 ])
-                ->orderBy('name', 'asc')
+                ->orderBy('machines.name', 'asc')
                 ->all([
-                    'id',
-                    'name',
-                    'description',
-                    'technical',
-                    'patrimony',
-                    'review_period',
-                    'warning_period',
-                    'warning_email_address',
+                    'machines.id',
+                    'machines.name',
+                    'machines.description',
+                    'machines.technical',
+                    'machines.patrimony',
+                    'machines.review_period',
+                    'machines.warning_period',
+                    'machines.warning_email_address',
                 ]);
 
             return (new MachineResponse($machines))
@@ -126,24 +139,37 @@ class MachineController extends Controller
             $machine = $this->machineRepository
                 ->with([
                     'users' => function ($query) {
-                        $query->select('id', 'name', 'email', 'telephone', 'additional');
+                        $query->select(
+                            'users.id',
+                            'users.name',
+                            'users.email',
+                            'users.telephone',
+                            'users.additional'
+                        );
                     },
                     'maintenance' => function ($query) {
                         $query->select('id', 'machine_id', 'review_type_id', 'review_at');
                     },
                     'pieces' => function ($query) {
-                        $query->select('id', 'code', 'name', 'description', 'stock_quantity', 'minimal_quantity');
+                        $query->select(
+                            'peaces.id',
+                            'peaces.code',
+                            'peaces.name',
+                            'peaces.description',
+                            'peaces.stock_quantity',
+                            'peaces.minimal_quantity'
+                        );
                     },
                 ])
                 ->find($id, [
-                    'id',
-                    'name',
-                    'description',
-                    'technical',
-                    'patrimony',
-                    'review_period',
-                    'warning_period',
-                    'warning_email_address',
+                    'machines.id',
+                    'machines.name',
+                    'machines.description',
+                    'machines.technical',
+                    'machines.patrimony',
+                    'machines.review_period',
+                    'machines.warning_period',
+                    'machines.warning_email_address',
                 ]);
 
             return (new MachineResponse($machine))
