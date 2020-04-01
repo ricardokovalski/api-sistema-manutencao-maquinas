@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Repositories\Contracts\MaintenanceRepositoryContract;
 use App\Http\Resources\MaintenanceResponse;
+use App\Repositories\Maintenance\Criteria\FilterByReviewAtCriteria;
+use App\Repositories\Maintenance\Criteria\FilterByReviewTypeCriteria;
+use App\Repositories\Maintenance\Criteria\FilterByTechnicalManagerCriteria;
 use App\Repositories\Maintenance\Criteria\JoinMachinesCriteria;
 use App\Repositories\Maintenance\Criteria\OrderByMachinesCriteria;
 use Illuminate\Http\JsonResponse;
@@ -25,13 +28,17 @@ class MaintenanceController extends Controller
     }
 
     /**
+     * @param Request $request
      * @return JsonResponse
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
         try {
 
             $maintenance = $this->maintenanceRepository
+                ->pushCriteria(new FilterByReviewAtCriteria($request->get('start_date'), $request->get('end_date')))
+                ->pushCriteria(new FilterByReviewTypeCriteria($request->get('review_type_id')))
+                ->pushCriteria(new FilterByTechnicalManagerCriteria($request->get('technical_manager_id')))
                 ->pushCriteria(new JoinMachinesCriteria())
                 ->pushCriteria(new OrderByMachinesCriteria())
                 ->with([
