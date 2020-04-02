@@ -11,7 +11,17 @@ class ClearTablesSeeder extends Seeder
      */
     public function run()
     {
-        \DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
+        if (config('database.default') == 'mysql') {
+            \DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        }
+
+        if (config('database.default') == 'pgsql') {
+            $tables = array_map('reset', \DB::select('SHOW TABLES'));
+            foreach($tables as $table) {
+                \DB::statement("ALTER {$table} DISABLE TRIGGER ALL;");
+            }
+        }
 
         $machines = \App\Entities\Machine::all();
 
@@ -44,6 +54,15 @@ class ClearTablesSeeder extends Seeder
         \DB::table('peaces')->delete();
         \DB::table('users')->delete();
 
-        \DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        if (config('database.default') == 'mysql') {
+            \DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        }
+
+        if (config('database.default') == 'pgsql') {
+            $tables = array_map('reset', \DB::select('SHOW TABLES'));
+            foreach($tables as $table) {
+                \DB::statement("TRUNCATE TABLE {$table} RESTART IDENTITY CASCADE");
+            }
+        }
     }
 }
