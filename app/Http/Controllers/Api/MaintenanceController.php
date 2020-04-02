@@ -90,7 +90,7 @@ class MaintenanceController extends Controller
 
             $maintenance = $this->maintenanceRepository->create($data);
 
-            $maintenance->peaces()->attach($request->get('piece_id'), [
+            $maintenance->pieces()->attach($request->get('piece_id'), [
                 'amount_used' => $request->get('amount_used'),
             ]);
 
@@ -183,7 +183,7 @@ class MaintenanceController extends Controller
 
             $maintenance = $this->maintenanceRepository->find($id);
 
-            $maintenance->peaces()->detach();
+            $maintenance->pieces()->detach();
 
             $this->maintenanceRepository->delete($id);
 
