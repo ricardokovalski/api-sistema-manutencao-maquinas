@@ -40,15 +40,11 @@ class FilterByReviewAtCriteria implements CriteriaInterface
      */
     public function apply($model, RepositoryInterface $repository)
     {
-        if (! $this->startDate && ! $this->endDate) {
-            return $model;
-        }
-
-        if ($this->startDate) {
+        if (! empty($this->startDate)) {
             $model = $model->where($this->column, '>=', $this->startDate . ' 00:00:00');
         }
 
-        if ($this->endDate) {
+        if (! empty($this->endDate)) {
             $model = $model->where($this->column, '<=', $this->endDate . ' 00:00:00');
         }
 
