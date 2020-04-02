@@ -26,7 +26,7 @@ class ChangeColumnPeacesTable extends Migration
     public function down()
     {
         Schema::table('peaces', function(Blueprint $table) {
-            $table->integer('minimal_quantity')->nullable(false)->change();
+            $table->integer('minimal_quantity')->change();
         });
     }
 }
