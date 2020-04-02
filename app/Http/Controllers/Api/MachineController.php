@@ -7,6 +7,7 @@ use App\Repositories\Contracts\MachineRepositoryContract;
 use App\Http\Resources\MachineResponse;
 use App\Repositories\Contracts\PeaceRepositoryContract;
 use App\Repositories\Contracts\UserRepositoryContract;
+use App\Services\EmailService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -33,19 +34,27 @@ class MachineController extends Controller
     protected $peaceRepository;
 
     /**
+     * @var EmailService
+     */
+    private $emailService;
+
+    /**
      * MachineController constructor.
      * @param MachineRepositoryContract $machineRepository
      * @param UserRepositoryContract $userRepository
      * @param PeaceRepositoryContract $peaceRepository
+     * @param EmailService $emailService
      */
     public function __construct(
         MachineRepositoryContract $machineRepository,
         UserRepositoryContract $userRepository,
-        PeaceRepositoryContract $peaceRepository
+        PeaceRepositoryContract $peaceRepository,
+        EmailService $emailService
     ) {
         $this->machineRepository = $machineRepository;
         $this->userRepository = $userRepository;
         $this->peaceRepository = $peaceRepository;
+        $this->emailService = $emailService;
     }
 
     /**
@@ -323,6 +332,35 @@ class MachineController extends Controller
             $machine->pieces()->attach($piece, [
                 'minimal_quantity' => $request->get('minimal_quantity'),
             ]);
+
+            return response()->json(true, Response::HTTP_OK);
+
+        } catch (\Exception $exception) {
+
+            return response()->json([
+                'error' => $exception->getMessage()
+            ], Response::HTTP_BAD_REQUEST);
+
+        }
+    }
+
+    public function sendEmail()
+    {
+        try {
+            $this->emailService
+                ->setTitle('Notificação de manutenção')
+                ->setNameTo('teste')
+                ->setMailTo('teste@gmail.com')
+                ->setNameFrom(config('mail.from.name'))
+                ->setMailFrom(config('mail.from.address'))
+                ->setTemplate('admin.email.machine')
+                ->setBody([
+                    'content' => 'Teste 123'
+                ]);
+
+            if (! $this->emailService->sendMail()) {
+                throw new \Exception('Falha ao enviar o email!', Response::HTTP_BAD_REQUEST);
+            }
 
             return response()->json(true, Response::HTTP_OK);
 
