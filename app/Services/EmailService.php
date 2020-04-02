@@ -22,9 +22,9 @@ class EmailService
     private $title;
 
     /**
-     * @var $mailFrom
+     * @var $emailFrom
      */
-    private $mailFrom;
+    private $emailFrom;
 
     /**
      * @var $nameFrom
@@ -32,9 +32,9 @@ class EmailService
     private $nameFrom;
 
     /**
-     * @var $mailTo
+     * @var $emailTo
      */
-    private $mailTo;
+    private $emailTo;
 
     /**
      * @var $nameTo
@@ -85,18 +85,18 @@ class EmailService
     /**
      * @return mixed
      */
-    public function getMailFrom()
+    public function getEmailFrom()
     {
-        return $this->mailFrom;
+        return $this->emailFrom;
     }
 
     /**
-     * @param $mailFrom
+     * @param $emailFrom
      * @return $this
      */
-    public function setMailFrom($mailFrom)
+    public function setEmailFrom($emailFrom)
     {
-        $this->mailFrom = $mailFrom;
+        $this->emailFrom = $emailFrom;
         return $this;
     }
 
@@ -121,18 +121,18 @@ class EmailService
     /**
      * @return mixed
      */
-    public function getMailTo()
+    public function getEmailTo()
     {
-        return $this->mailTo;
+        return $this->emailTo;
     }
 
     /**
-     * @param $mailTo
+     * @param $emailTo
      * @return $this
      */
-    public function setMailTo($mailTo)
+    public function setEmailTo($emailTo)
     {
-        $this->mailTo = $mailTo;
+        $this->emailTo = $emailTo;
         return $this;
     }
 
@@ -175,7 +175,7 @@ class EmailService
     /**
      * @return bool|null
      */
-    public function sendMail()
+    public function sendEmail()
     {
         if (config("mail.host") and
             config("mail.username") and
@@ -183,8 +183,8 @@ class EmailService
         ) {
 
             $message = function (Message $message) {
-                $message->from($this->getMailFrom(), $this->getNameFrom())
-                    ->to($this->getMailTo(), $this->getNameTo())
+                $message->from($this->getEmailFrom(), $this->getNameFrom())
+                    ->to($this->getEmailTo(), $this->getNameTo())
                     ->subject($this->getTitle());
             };
 

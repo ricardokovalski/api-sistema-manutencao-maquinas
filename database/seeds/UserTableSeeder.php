@@ -12,10 +12,25 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        Model::unguard();
+        $users = [
+            [
+                'name' => 'Marco Taborda',
+                'email' => 'marcotaborda.jr@gmail.com',
+                'email_verified_at' => now(),
+                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+                'remember_token' => \Str::random(10),
+            ],
+            [
+                'name' => 'Ricardo Kovalski',
+                'email' => 'ricardokovalskicruz@gmail.com',
+                'email_verified_at' => now(),
+                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+                'remember_token' => \Str::random(10),
+            ],
+        ];
 
-        factory(App\Entities\User::class, 30)->create();
-
-        Model::reguard();
+        foreach ($users as $user) {
+            \App\Entities\User::create($user);
+        }
     }
 }

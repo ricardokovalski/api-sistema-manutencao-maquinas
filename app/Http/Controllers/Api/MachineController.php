@@ -350,15 +350,15 @@ class MachineController extends Controller
             $this->emailService
                 ->setTitle('Notificação de manutenção')
                 ->setNameTo('teste')
-                ->setMailTo('teste@gmail.com')
+                ->setEmailTo('teste@gmail.com')
                 ->setNameFrom(config('mail.from.name'))
-                ->setMailFrom(config('mail.from.address'))
+                ->setEmailFrom(config('mail.from.address'))
                 ->setTemplate('admin.email.machine')
                 ->setBody([
                     'content' => 'Teste 123'
                 ]);
 
-            if (! $this->emailService->sendMail()) {
+            if (! $this->emailService->sendEmail()) {
                 throw new \Exception('Falha ao enviar o email!', Response::HTTP_BAD_REQUEST);
             }
 
