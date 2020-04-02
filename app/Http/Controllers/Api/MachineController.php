@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendEmail;
 use App\Repositories\Contracts\MachineRepositoryContract;
 use App\Http\Resources\MachineResponse;
 use App\Repositories\Contracts\PeaceRepositoryContract;
@@ -347,20 +348,12 @@ class MachineController extends Controller
     public function sendEmail()
     {
         try {
-            $this->emailService
-                ->setTitle('Notificação de manutenção')
-                ->setNameTo('teste')
-                ->setEmailTo('teste@gmail.com')
-                ->setNameFrom(config('mail.from.name'))
-                ->setEmailFrom(config('mail.from.address'))
-                ->setTemplate('admin.email.machine')
-                ->setBody([
-                    'content' => 'Teste 123'
-                ]);
 
-            if (! $this->emailService->sendEmail()) {
-                throw new \Exception('Falha ao enviar o email!', Response::HTTP_BAD_REQUEST);
-            }
+            $job = new SendEmail([
+                'nameTo' => 'Teste Teste',
+                'emailTo' => 'teste@gmail.com'
+            ]);
+            $this->dispatch($job);
 
             return response()->json(true, Response::HTTP_OK);
 
