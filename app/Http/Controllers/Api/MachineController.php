@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\SendEmail;
-use App\Repositories\Contracts\MachineRepositoryContract;
 use App\Http\Resources\MachineResponse;
+use App\Repositories\Contracts\MachineRepositoryContract;
 use App\Repositories\Contracts\PeaceRepositoryContract;
 use App\Repositories\Contracts\UserRepositoryContract;
+use App\Services\Contracts\MachineServiceContract;
 use App\Services\EmailService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -40,21 +41,29 @@ class MachineController extends Controller
     private $emailService;
 
     /**
+     * @var MachineServiceContract
+     */
+    protected $machineService;
+
+    /**
      * MachineController constructor.
      * @param MachineRepositoryContract $machineRepository
      * @param UserRepositoryContract $userRepository
      * @param PeaceRepositoryContract $peaceRepository
+     * @param MachineServiceContract $machineService
      * @param EmailService $emailService
      */
     public function __construct(
         MachineRepositoryContract $machineRepository,
         UserRepositoryContract $userRepository,
         PeaceRepositoryContract $peaceRepository,
+        MachineServiceContract $machineService,
         EmailService $emailService
     ) {
         $this->machineRepository = $machineRepository;
         $this->userRepository = $userRepository;
         $this->peaceRepository = $peaceRepository;
+        $this->machineService = $machineService;
         $this->emailService = $emailService;
     }
 
@@ -259,32 +268,7 @@ class MachineController extends Controller
     {
         try {
 
-            $machine = $this->machineRepository
-                ->findByField('id', $request->get('machine_id'))
-                ->first();
-
-            if (! $machine) {
-                throw new \Exception('Máquina não encontrada.', Response::HTTP_NOT_FOUND);
-            }
-
-            $user = $this->userRepository
-                ->findByField('id', $request->get('user_id'))
-                ->first();
-
-            if (! $user) {
-                throw new \Exception('Usuário não encontrado.', Response::HTTP_NOT_FOUND);
-            }
-
-            $machineWithUser = $machine->whereHas('users', function ($query) use ($user, $machine) {
-                return $query->where('machine_users.user_id', $user->id)
-                    ->where('machine_users.machine_id', $machine->id);
-            })->first();
-
-            if ($machineWithUser) {
-                throw new \Exception('Esta máquina já possui esse Responsável Técnico vinculado!', Response::HTTP_NOT_FOUND);
-            }
-
-            $machine->users()->attach($user);
+            $this->machineService->assignUser($request);
 
             return response()->json(true, Response::HTTP_OK);
 
@@ -305,34 +289,7 @@ class MachineController extends Controller
     {
         try {
 
-            $machine = $this->machineRepository
-                ->findByField('id', $request->get('machine_id'))
-                ->first();
-
-            if (! $machine) {
-                throw new \Exception('Máquina não encontrada.', Response::HTTP_NOT_FOUND);
-            }
-
-            $piece = $this->peaceRepository
-                ->findByField('id', $request->get('piece_id'))
-                ->first();
-
-            if (! $piece) {
-                throw new \Exception('Peça não encontrada.', Response::HTTP_NOT_FOUND);
-            }
-
-            $machineWithPiece = $machine->whereHas('pieces', function ($query) use ($piece, $machine) {
-                return $query->where('machine_pieces.piece_id', $piece->id)
-                    ->where('machine_pieces.machine_id', $machine->id);
-            })->first();
-
-            if ($machineWithPiece) {
-                throw new \Exception('Esta máquina já possui essa peça de reposição!', Response::HTTP_NOT_FOUND);
-            }
-
-            $machine->pieces()->attach($piece, [
-                'minimal_quantity' => $request->get('minimal_quantity'),
-            ]);
+            $this->machineService->assignPiece($request);
 
             return response()->json(true, Response::HTTP_OK);
 

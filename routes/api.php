@@ -27,10 +27,16 @@ Route::post('auth/login', 'Api\AuthController@login');
     Route::post('auth/refresh', 'Api\AuthController@refresh');
     Route::post('auth/me', 'Api\AuthController@me');
 
+    Route::get('dashboard', 'Api\DashboardController@index');
+
     Route::get('machines/send-email', 'Api\MachineController@sendEmail');
+
     Route::resource('machines', 'Api\MachineController')->except('create', 'edit');
+
     Route::post('machines/technical-manager', 'Api\MachineController@assignUser');
+
     Route::post('machines/piece', 'Api\MachineController@assignPiece');
+    Route::delete('machines/piece/{id}', 'Api\MachineController@removePiece');
 
     Route::resource('maintenance', 'Api\MaintenanceController')->except('create', 'edit');
     Route::resource('pieces', 'Api\PeaceController')->except('create', 'edit');

@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Services\Contracts\MachineServiceContract;
+use App\Services\Machines\MachineService;
 use Illuminate\Support\ServiceProvider;
 
 class ServiceLayerProvider extends ServiceProvider
@@ -23,6 +25,6 @@ class ServiceLayerProvider extends ServiceProvider
      */
     public function boot()
     {
-
+        $this->app->bind(MachineServiceContract::class, MachineService::class);
     }
 }
