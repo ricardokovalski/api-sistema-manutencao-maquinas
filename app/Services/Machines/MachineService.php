@@ -58,16 +58,14 @@ class MachineService implements MachineServiceContract
     public function assignUser(Request $request)
     {
         $machine = $this->machineRepository
-            ->findByField('id', $request->get('machine_id'))
-            ->first();
+            ->findMachine($request->get('machine_id'));
 
         if (! $machine) {
             throw new MachineException('Máquina não encontrada.', Response::HTTP_NOT_FOUND);
         }
 
         $user = $this->userRepository
-            ->findByField('id', $request->get('user_id'))
-            ->first();
+            ->findUser($request->get('user_id'));
 
         if (! $user) {
             throw new UserException('Usuário não encontrado.', Response::HTTP_NOT_FOUND);
@@ -91,21 +89,46 @@ class MachineService implements MachineServiceContract
      * @param Request $request
      * @return bool
      * @throws MachineException
+     * @throws UserException
+     */
+    public function removeTechnicalManagerFromMachine(Request $request)
+    {
+        $machine = $this->machineRepository
+            ->findMachine($request->get('machine_id'));
+
+        if (! $machine) {
+            throw new MachineException('Máquina não encontrada.', Response::HTTP_NOT_FOUND);
+        }
+
+        $user = $this->userRepository
+            ->findUser($request->get('user_id'));
+
+        if (! $user) {
+            throw new UserException('Usuário não encontrado.', Response::HTTP_NOT_FOUND);
+        }
+
+        $machine->users()->detach($user);
+
+        return true;
+    }
+
+    /**
+     * @param Request $request
+     * @return bool
+     * @throws MachineException
      * @throws PieceException
      */
     public function assignPiece(Request $request)
     {
         $machine = $this->machineRepository
-            ->findByField('id', $request->get('machine_id'))
-            ->first();
+            ->findMachine($request->get('machine_id'));
 
         if (! $machine) {
             throw new MachineException('Máquina não encontrada.', Response::HTTP_NOT_FOUND);
         }
 
         $piece = $this->peaceRepository
-            ->findByField('id', $request->get('piece_id'))
-            ->first();
+            ->findPiece($request->get('piece_id'));
 
         if (! $piece) {
             throw new PieceException('Peça não encontrada.', Response::HTTP_NOT_FOUND);
@@ -123,6 +146,33 @@ class MachineService implements MachineServiceContract
         $machine->pieces()->attach($piece, [
             'minimal_quantity' => $request->get('minimal_quantity'),
         ]);
+
+        return true;
+    }
+
+    /**
+     * @param Request $request
+     * @return bool
+     * @throws MachineException
+     * @throws PieceException
+     */
+    public function removePieceFromMachine(Request $request)
+    {
+        $machine = $this->machineRepository
+            ->findMachine($request->get('machine_id'));
+
+        if (! $machine) {
+            throw new MachineException('Máquina não encontrada.', Response::HTTP_NOT_FOUND);
+        }
+
+        $piece = $this->peaceRepository
+            ->findPiece($request->get('piece_id'));
+
+        if (! $piece) {
+            throw new PieceException('Peça não encontrada.', Response::HTTP_NOT_FOUND);
+        }
+
+        $machine->pieces()->detach($piece);
 
         return true;
     }

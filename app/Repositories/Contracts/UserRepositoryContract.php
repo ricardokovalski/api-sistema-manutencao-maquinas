@@ -13,4 +13,6 @@ interface UserRepositoryContract extends RepositoryInterface
     public function getTechnicalManagers(array $columns = ['*']);
 
     public function getAllUsers(array $columns = ['*']);
+
+    public function findUser($id);
 }

@@ -21,5 +21,10 @@ class MachineRepository extends BaseRepository implements MachineRepositoryContr
     {
         return Machine::class;
     }
+
+    public function findMachine($id)
+    {
+        return $this->findByField('id', $id)->first();
+    }
     
 }

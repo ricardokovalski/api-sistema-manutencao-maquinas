@@ -285,11 +285,53 @@ class MachineController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
+    public function removeUser(Request $request): JsonResponse
+    {
+        try {
+
+            $this->machineService->removeTechnicalManagerFromMachine($request);
+
+            return response()->json(true, Response::HTTP_OK);
+
+        } catch (\Exception $exception) {
+
+            return response()->json([
+                'error' => $exception->getMessage()
+            ], Response::HTTP_BAD_REQUEST);
+
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function assignPiece(Request $request): JsonResponse
     {
         try {
 
             $this->machineService->assignPiece($request);
+
+            return response()->json(true, Response::HTTP_OK);
+
+        } catch (\Exception $exception) {
+
+            return response()->json([
+                'error' => $exception->getMessage()
+            ], Response::HTTP_BAD_REQUEST);
+
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function removePiece(Request $request): JsonResponse
+    {
+        try {
+
+            $this->machineService->removePieceFromMachine($request);
 
             return response()->json(true, Response::HTTP_OK);
 

@@ -10,5 +10,5 @@ use Prettus\Repository\Contracts\RepositoryInterface;
  */
 interface PeaceRepositoryContract extends RepositoryInterface
 {
-    //
+    public function findPiece($id);
 }

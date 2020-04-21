@@ -10,5 +10,5 @@ use Prettus\Repository\Contracts\RepositoryInterface;
  */
 interface MachineRepositoryContract extends RepositoryInterface
 {
-    //
+    public function findMachine($id);
 }

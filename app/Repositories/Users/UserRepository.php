@@ -56,6 +56,11 @@ class UserRepository extends BaseRepository implements UserRepositoryContract
             ->get($columns);
     }
 
+    public function findUser($id)
+    {
+        return $this->findByField('id', $id)->first();
+    }
+
     /**
      * @param Builder $model
      * @return Builder

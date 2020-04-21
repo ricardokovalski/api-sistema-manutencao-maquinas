@@ -17,5 +17,10 @@ class PeaceRepository extends BaseRepository implements PeaceRepositoryContract
     {
         return Peace::class;
     }
+
+    public function findPiece($id)
+    {
+        return $this->findByField('id', $id)->first();
+    }
     
 }

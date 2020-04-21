@@ -34,9 +34,10 @@ Route::post('auth/login', 'Api\AuthController@login');
     Route::resource('machines', 'Api\MachineController')->except('create', 'edit');
 
     Route::post('machines/technical-manager', 'Api\MachineController@assignUser');
+    Route::post('machines/technical-manager/remove', 'Api\MachineController@removeUser');
 
     Route::post('machines/piece', 'Api\MachineController@assignPiece');
-    Route::delete('machines/piece/{id}', 'Api\MachineController@removePiece');
+    Route::post('machines/piece/remove', 'Api\MachineController@removePiece');
 
     Route::resource('maintenance', 'Api\MaintenanceController')->except('create', 'edit');
     Route::resource('pieces', 'Api\PeaceController')->except('create', 'edit');
