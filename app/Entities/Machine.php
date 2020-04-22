@@ -54,4 +54,12 @@ class Machine extends Model
             ->withPivot('minimal_quantity')
             ->withTimestamps();
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function files()
+    {
+        return $this->belongsToMany(File::class, 'machine_files', 'machine_id', 'file_id');
+    }
 }

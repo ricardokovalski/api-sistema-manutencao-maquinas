@@ -39,6 +39,8 @@ Route::post('auth/login', 'Api\AuthController@login');
     Route::post('machines/piece', 'Api\MachineController@assignPiece');
     Route::post('machines/piece/remove', 'Api\MachineController@removePiece');
 
+    Route::resource('files', 'Api\FileController')->except('index', 'create', 'edit', 'update');
+
     Route::resource('maintenance', 'Api\MaintenanceController')->except('create', 'edit');
     Route::resource('pieces', 'Api\PeaceController')->except('create', 'edit');
     Route::resource('review-types', 'Api\ReviewTypeController')->except('create', 'store', 'show', 'edit', 'update', 'destroy');
