@@ -6,7 +6,6 @@ use App\Exceptions\MachineException;
 use App\Repositories\Contracts\FileRepositoryContract;
 use App\Repositories\Contracts\MachineRepositoryContract;
 use App\Services\Contracts\FileServiceContract;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 /**
@@ -59,14 +58,6 @@ class FileService implements FileServiceContract
         ]);
 
         return true;
-    }
-
-    public function findFile($id)
-    {
-        $file = $this->fileRepository->findFile($id);
-        $path =  "uploads/machines/{$file->name}";
-
-        return array($file, $path);
     }
 
 }
