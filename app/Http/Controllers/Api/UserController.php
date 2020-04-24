@@ -152,6 +152,10 @@ class UserController extends Controller
                 throw new \Exception('Perfil não encontrado!', Response::HTTP_NOT_FOUND);
             }
 
+            $user->roles()->pluck('id')->map(function($role) use ($user) {
+                $user->removeRole($role);
+            });
+
             $user->assignRole($request->get('profile_id'));
 
             return (new UserResponse($user))
