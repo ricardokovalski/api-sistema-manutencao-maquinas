@@ -3,6 +3,7 @@
 namespace App\Entities;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Peace
@@ -10,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Peace extends Model
 {
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -27,6 +29,7 @@ class Peace extends Model
     protected $dates = [
         'created_at',
         'updated_at',
+        'deleted_at',
     ];
 
     /**
@@ -45,7 +48,8 @@ class Peace extends Model
     public function machines()
     {
         return $this->belongsToMany(Machine::class, 'machine_pieces', 'piece_id', 'machine_id')
-            ->withPivot('minimal_quantity')
-            ->withTimestamps();
+            ->whereNull('machine_pieces.deleted_at')
+            ->withTimestamps()
+            ->withPivot('minimal_quantity', 'deleted_at');
     }
 }

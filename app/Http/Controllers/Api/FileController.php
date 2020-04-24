@@ -105,9 +105,16 @@ class FileController extends Controller
 
             $file = $this->fileRepository->findFile($id);
 
-            $file->machines()->sync([
-                $file->machines->first()->id => ['deleted_at' => \Carbon\Carbon::now()]
-            ]);
+            /**
+             * Remove o vínculo das máquinas com a peça a ser deletada
+             */
+            $machinesFromFile = $file->machines->keyBy('id')->map(function() {
+                return [
+                    'deleted_at' => \Carbon\Carbon::now()
+                ];
+            })->toArray();
+
+            $file->machines()->sync($machinesFromFile, false);
 
             $this->fileRepository->delete($id);
 

@@ -163,6 +163,17 @@ class PeaceController extends Controller
 
             $peace->maintenance()->detach();
 
+            /**
+             * Remove o vínculo das máquinas com a peça a ser deletada
+             */
+            $machinesFromPiece = $peace->machines->keyBy('id')->map(function() {
+                return [
+                    'deleted_at' => \Carbon\Carbon::now()
+                ];
+            })->toArray();
+
+            $peace->machines()->sync($machinesFromPiece, false);
+
             $this->peaceRepository->delete($id);
 
             return response()->json(true, Response::HTTP_OK);

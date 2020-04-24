@@ -3,6 +3,7 @@
 namespace App\Entities;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
@@ -14,7 +15,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  */
 class User extends Authenticatable implements JWTSubject
 {
-    use Notifiable, HasRoles;
+    use Notifiable, HasRoles, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -68,6 +69,9 @@ class User extends Authenticatable implements JWTSubject
      */
     public function machines()
     {
-        return $this->belongsToMany(Machine::class, 'machine_users', 'user_id', 'machine_id');
+        return $this->belongsToMany(Machine::class, 'machine_users', 'user_id', 'machine_id')
+            ->whereNull('machine_users.deleted_at')
+            ->withTimestamps()
+            ->withPivot('deleted_at');
     }
 }

@@ -3,9 +3,12 @@
 namespace App\Entities;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Machine extends Model
 {
+    use SoftDeletes;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -27,6 +30,7 @@ class Machine extends Model
     protected $dates = [
         'created_at',
         'updated_at',
+        'deleted_at',
     ];
 
     /**
@@ -34,7 +38,10 @@ class Machine extends Model
      */
     public function users()
     {
-        return $this->belongsToMany(User::class, 'machine_users', 'machine_id', 'user_id');
+        return $this->belongsToMany(User::class, 'machine_users', 'machine_id', 'user_id')
+            ->whereNull('machine_users.deleted_at')
+            ->withTimestamps()
+            ->withPivot('deleted_at');
     }
 
     /**
@@ -51,8 +58,9 @@ class Machine extends Model
     public function pieces()
     {
         return $this->belongsToMany(Peace::class, 'machine_pieces', 'machine_id', 'piece_id')
-            ->withPivot('minimal_quantity')
-            ->withTimestamps();
+            ->whereNull('machine_pieces.deleted_at')
+            ->withTimestamps()
+            ->withPivot('minimal_quantity', 'deleted_at');
     }
 
     /**
@@ -60,6 +68,9 @@ class Machine extends Model
      */
     public function files()
     {
-        return $this->belongsToMany(File::class, 'machine_files', 'machine_id', 'file_id');
+        return $this->belongsToMany(File::class, 'machine_files', 'machine_id', 'file_id')
+            ->whereNull('machine_files.deleted_at')
+            ->withTimestamps()
+            ->withPivot('deleted_at');
     }
 }

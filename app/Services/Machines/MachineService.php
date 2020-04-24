@@ -55,7 +55,7 @@ class MachineService implements MachineServiceContract
      * @throws MachineException
      * @throws UserException
      */
-    public function assignUser(Request $request)
+    public function assignTechnicalManagerFromMachine(Request $request)
     {
         $machine = $this->machineRepository
             ->findMachine($request->get('machine_id'));
@@ -107,7 +107,9 @@ class MachineService implements MachineServiceContract
             throw new UserException('Usuário não encontrado.', Response::HTTP_NOT_FOUND);
         }
 
-        $machine->users()->detach($user);
+        $machine->users()->sync([
+            $user->id => ['deleted_at' => \Carbon\Carbon::now()]
+        ]);
 
         return true;
     }
@@ -118,7 +120,7 @@ class MachineService implements MachineServiceContract
      * @throws MachineException
      * @throws PieceException
      */
-    public function assignPiece(Request $request)
+    public function assignPieceFromMachine(Request $request)
     {
         $machine = $this->machineRepository
             ->findMachine($request->get('machine_id'));
@@ -172,7 +174,9 @@ class MachineService implements MachineServiceContract
             throw new PieceException('Peça não encontrada.', Response::HTTP_NOT_FOUND);
         }
 
-        $machine->pieces()->detach($piece);
+        $machine->pieces()->sync([
+            $piece->id => ['deleted_at' => \Carbon\Carbon::now()]
+        ]);
 
         return true;
     }

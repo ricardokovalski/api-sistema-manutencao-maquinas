@@ -241,12 +241,46 @@ class MachineController extends Controller
 
             $machine = $this->machineRepository->find($id);
 
-            if ($machine->maintenance->pluck('id')) {
+            if ($machine->maintenance->pluck('id')->first()) {
                 throw new \Exception('Não é possível remover está máquina, pois existem manutenções vinculadas à está máquina.', Response::HTTP_NOT_FOUND);
             }
 
-            $machine->users()->detach();
+            /**
+             * Remove o vínculo dos usuários com a máquina a ser deletada
+             */
+            $usersFromMachine = $machine->users->keyBy('id')->map(function() {
+                return [
+                    'deleted_at' => \Carbon\Carbon::now()
+                ];
+            })->toArray();
 
+            $machine->users()->sync($usersFromMachine, false);
+
+            /**
+             * Remove o vínculo das peças com a máquina a ser deletada
+             */
+            $piecesFromMachine = $machine->pieces->keyBy('id')->map(function() {
+                return [
+                    'deleted_at' => \Carbon\Carbon::now()
+                ];
+            })->toArray();
+
+            $machine->pieces()->sync($piecesFromMachine, false);
+
+            /**
+             * Remove o vínculo dos arquivos com a máquina a ser deletada
+             */
+            $filesFromMachine = $machine->files->keyBy('id')->map(function() {
+                return [
+                    'deleted_at' => \Carbon\Carbon::now()
+                ];
+            })->toArray();
+
+            $machine->files()->sync($filesFromMachine, false);
+
+            /**
+             * Deleta a máquina
+             */
             $this->machineRepository->delete($id);
 
             return response()->json(true, Response::HTTP_OK);
@@ -268,7 +302,7 @@ class MachineController extends Controller
     {
         try {
 
-            $this->machineService->assignUser($request);
+            $this->machineService->assignTechnicalManagerFromMachine($request);
 
             return response()->json(true, Response::HTTP_OK);
 
@@ -310,7 +344,7 @@ class MachineController extends Controller
     {
         try {
 
-            $this->machineService->assignPiece($request);
+            $this->machineService->assignPieceFromMachine($request);
 
             return response()->json(true, Response::HTTP_OK);
 

@@ -27,7 +27,7 @@ class File extends Model
     protected $dates = [
         'created_at',
         'updated_at',
-        'deleted_at'
+        'deleted_at',
     ];
 
     /**
@@ -36,6 +36,7 @@ class File extends Model
     public function machines()
     {
         return $this->belongsToMany(Machine::class, 'machine_files', 'file_id', 'machine_id')
+            ->whereNull('machine_files.deleted_at')
             ->withTimestamps()
             ->withPivot('deleted_at');
     }

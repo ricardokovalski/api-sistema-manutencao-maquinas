@@ -181,7 +181,13 @@ class TechnicalManagerController extends Controller
 
             $technical = $this->userRepository->find($id);
 
-            $technical->machines()->detach();
+            $machinesFromTechnical = $technical->machines->keyBy('id')->map(function() {
+                return [
+                    'deleted_at' => \Carbon\Carbon::now()
+                ];
+            })->toArray();
+
+            $technical->machines()->sync($machinesFromTechnical, false);
 
             $this->userRepository->delete($id);
 
