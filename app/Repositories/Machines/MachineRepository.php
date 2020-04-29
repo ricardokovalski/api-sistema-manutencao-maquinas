@@ -66,7 +66,7 @@ class MachineRepository extends BaseRepository implements MachineRepositoryContr
                 where maintenance.machine_id = machines.id
                 )) < machines.review_period', [$currentDate->toDateString()]
             );
-        })->toSql();
+        })->count();
     }
 
     /**

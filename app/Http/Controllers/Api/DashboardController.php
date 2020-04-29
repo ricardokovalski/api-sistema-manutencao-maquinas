@@ -13,10 +13,18 @@ use Illuminate\Http\Response;
  */
 class DashboardController extends Controller
 {
+    /**
+     * @var DashboardServiceContract
+     */
     protected $dashboardService;
 
-    public function __construct(DashboardServiceContract $dashboardService)
-    {
+    /**
+     * DashboardController constructor.
+     * @param DashboardServiceContract $dashboardService
+     */
+    public function __construct(
+        DashboardServiceContract $dashboardService
+    ) {
         $this->dashboardService = $dashboardService;
     }
 
