@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Services\Contracts\DashboardServiceContract;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
@@ -12,6 +13,13 @@ use Illuminate\Http\Response;
  */
 class DashboardController extends Controller
 {
+    protected $dashboardService;
+
+    public function __construct(DashboardServiceContract $dashboardService)
+    {
+        $this->dashboardService = $dashboardService;
+    }
+
     /**
      * @return JsonResponse
      */
@@ -20,9 +28,9 @@ class DashboardController extends Controller
         try {
 
             return response()->json([
-                'red' => rand(0, 10),
-                'yellow' => rand(0, 15),
-                'green' => rand(0, 5),
+                'red' => $this->dashboardService->getRed(),
+                'yellow' => $this->dashboardService->getYellow(),
+                'green' => $this->dashboardService->getGreen(),
             ], Response::HTTP_OK);
 
         } catch (\Exception $exception) {

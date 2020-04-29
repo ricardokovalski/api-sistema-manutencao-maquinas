@@ -2,8 +2,6 @@
 
 namespace App\Services\Contracts;
 
-use Illuminate\Http\Request;
-
 interface FileServiceContract
 {
     public function storeFile(array $request);

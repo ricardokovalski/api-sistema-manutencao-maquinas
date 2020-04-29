@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Contracts;
 
+use Carbon\Carbon;
 use Prettus\Repository\Contracts\RepositoryInterface;
 
 /**
@@ -11,4 +12,10 @@ use Prettus\Repository\Contracts\RepositoryInterface;
 interface MachineRepositoryContract extends RepositoryInterface
 {
     public function findMachine($id);
+
+    public function getTotalRed(Carbon $currentDate);
+
+    public function getTotalYellow(Carbon $currentDate);
+
+    public function getTotalGreen(Carbon $currentDate);
 }
