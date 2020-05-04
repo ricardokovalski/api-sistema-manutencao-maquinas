@@ -98,6 +98,15 @@ class MachineController extends Controller
                             'peaces.minimal_quantity'
                         );
                     },
+                    'files' => function ($query) {
+                        $query->select(
+                            'files.id',
+                            'files.name',
+                            'files.title',
+                            'files.description',
+                            'files.type'
+                        );
+                    },
                 ])
                 ->orderBy('machines.name', 'asc')
                 ->all([
@@ -177,6 +186,15 @@ class MachineController extends Controller
                             'peaces.description',
                             'peaces.stock_quantity',
                             'peaces.minimal_quantity'
+                        );
+                    },
+                    'files' => function ($query) {
+                        $query->select(
+                            'files.id',
+                            'files.name',
+                            'files.title',
+                            'files.description',
+                            'files.type'
                         );
                     },
                 ])

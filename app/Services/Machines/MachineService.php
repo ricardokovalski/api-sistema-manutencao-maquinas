@@ -8,6 +8,7 @@ use App\Exceptions\UserException;
 use App\Repositories\Contracts\MachineRepositoryContract;
 use App\Repositories\Contracts\PeaceRepositoryContract;
 use App\Repositories\Contracts\UserRepositoryContract;
+use App\Services\AuditService;
 use App\Services\Contracts\MachineServiceContract;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -36,19 +37,27 @@ class MachineService implements MachineServiceContract
     private $peaceRepository;
 
     /**
+     * @var AuditService
+     */
+    private $auditService;
+
+    /**
      * MachineService constructor.
      * @param MachineRepositoryContract $machineRepository
      * @param UserRepositoryContract $userRepository
      * @param PeaceRepositoryContract $peaceRepository
+     * @param AuditService $auditService
      */
     public function __construct(
         MachineRepositoryContract $machineRepository,
         UserRepositoryContract $userRepository,
-        PeaceRepositoryContract $peaceRepository
+        PeaceRepositoryContract $peaceRepository,
+        AuditService $auditService
     ) {
         $this->machineRepository = $machineRepository;
         $this->userRepository = $userRepository;
         $this->peaceRepository = $peaceRepository;
+        $this->auditService = $auditService;
     }
 
     /**
@@ -84,7 +93,7 @@ class MachineService implements MachineServiceContract
 
         $machine->users()->attach($user);
 
-        Audit::create([
+        $this->auditService->create([
             'event' => 'created',
             'auditable_type' => 'assignTechnicalManagerFromMachine',
             'auditable_id' => $machine->id,
@@ -92,12 +101,9 @@ class MachineService implements MachineServiceContract
             'new_values' => [
                 'machine_id' => $machine->id,
                 'user_id' => $user->id,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
+                'created_at' => Carbon::now()->toDateTimeString(),
+                'updated_at' => Carbon::now()->toDateTimeString(),
             ],
-            'url' => \OwenIt\Auditing\Resolvers\UrlResolver::resolve(),
-            'ip_address' => \OwenIt\Auditing\Resolvers\IpAddressResolver::resolve(),
-            'user_agent' => \OwenIt\Auditing\Resolvers\UserAgentResolver::resolve(),
         ]);
 
         return true;

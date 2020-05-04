@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Repositories\Audit\AuditRepository;
+use App\Repositories\Contracts\AuditRepositoryContract;
 use App\Repositories\Contracts\FileRepositoryContract;
 use App\Repositories\Contracts\MachineRepositoryContract;
 use App\Repositories\Contracts\MaintenanceRepositoryContract;
@@ -39,6 +41,8 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->app->bind(AuditRepositoryContract::class, AuditRepository::class);
+
         $this->app->bind(FileRepositoryContract::class, FileRepository::class);
 
         $this->app->bind(MachineRepositoryContract::class, MachineRepository::class);
