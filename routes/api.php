@@ -19,9 +19,9 @@ use Illuminate\Http\Request;
 
 Route::post('auth/login', 'Api\AuthController@login');
 
-/*Route::group([
-    'middleware' => '',
-], function () {*/
+Route::group([
+    'middleware' => 'jwt.verify',
+], function () {
 
     //Route::post('auth/logout', 'Api\AuthController@logout');
     //Route::post('auth/refresh', 'Api\AuthController@refresh');
@@ -49,4 +49,4 @@ Route::post('auth/login', 'Api\AuthController@login');
     Route::resource('technical-managers', 'Api\TechnicalManagerController')->except('create', 'edit');
     Route::resource('users', 'Api\UserController')->except('create', 'edit');
     Route::resource('logs', 'Api\AuditsController')->except('create', 'store', 'show', 'edit', 'update', 'destroy');
-//});
+});
