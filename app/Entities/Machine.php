@@ -24,7 +24,6 @@ class Machine extends Model implements AuditableContract
         'patrimony',
         'review_period',
         'warning_period',
-        'warning_email_address',
     ];
 
     /**

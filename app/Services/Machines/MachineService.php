@@ -135,6 +135,23 @@ class MachineService implements MachineServiceContract
             $user->id => ['deleted_at' => Carbon::now()]
         ], false);
 
+        $pivot = $machine->users()->where('user_id', $user->id)->first()->pivot;
+
+        $this->auditService->create([
+            'event' => 'deleted',
+            'auditable_type' => 'removeTechnicalManagerFromMachine',
+            'auditable_id' => $pivot->machine_id,
+            'old_values' => [
+                'machine_id' => $pivot->machine_id,
+                'user_id' => $pivot->user_id,
+                'created_at' => $pivot->created_at->toDateTimeString(),
+                'updated_at' => $pivot->updated_at->toDateTimeString(),
+            ],
+            'new_values' => [
+                'deleted_at' => Carbon::now()->toDateTimeString(),
+            ],
+        ]);
+
         return true;
     }
 
@@ -173,6 +190,20 @@ class MachineService implements MachineServiceContract
             'minimal_quantity' => $request->get('minimal_quantity'),
         ]);
 
+        $this->auditService->create([
+            'event' => 'deleted',
+            'auditable_type' => 'assignPieceFromMachine',
+            'auditable_id' => $machine->id,
+            'old_values' => [],
+            'new_values' => [
+                'machine_id' => $machine->id,
+                'piece_id' => $piece->id,
+                'minimal_quantity' => $request->get('minimal_quantity'),
+                'created_at' => Carbon::now()->toDateTimeString(),
+                'updated_at' => Carbon::now()->toDateTimeString(),
+            ],
+        ]);
+
         return true;
     }
 
@@ -201,6 +232,24 @@ class MachineService implements MachineServiceContract
         $machine->pieces()->sync([
             $piece->id => ['deleted_at' => Carbon::now()]
         ], false);
+
+        $pivot = $machine->pieces()->where('piece_id', $piece->id)->first()->pivot;
+
+        $this->auditService->create([
+            'event' => 'deleted',
+            'auditable_type' => 'removePieceFromMachine',
+            'auditable_id' => $pivot->machine_id,
+            'old_values' => [
+                'machine_id' => $pivot->machine_id,
+                'piece_id' => $pivot->piece_id,
+                'minimal_quantity' => $request->get('minimal_quantity'),
+                'created_at' => $pivot->created_at->toDateTimeString(),
+                'updated_at' => $pivot->updated_at->toDateTimeString(),
+            ],
+            'new_values' => [
+                'deleted_at' => Carbon::now()->toDateTimeString(),
+            ],
+        ]);
 
         return true;
     }

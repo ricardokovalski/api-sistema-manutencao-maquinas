@@ -119,7 +119,6 @@ class MachineController extends Controller
                     'machines.patrimony',
                     'machines.review_period',
                     'machines.warning_period',
-                    'machines.warning_email_address',
                 ]);
 
             return (new MachineResponse($machines))
@@ -208,7 +207,6 @@ class MachineController extends Controller
                     'machines.patrimony',
                     'machines.review_period',
                     'machines.warning_period',
-                    'machines.warning_email_address',
                 ]);
 
             return (new MachineResponse($machine))

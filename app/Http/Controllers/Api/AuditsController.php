@@ -33,7 +33,9 @@ class AuditsController extends Controller
     {
         try {
 
-            $audits = $this->auditRepository->all();
+            $audits = $this->auditRepository
+                ->orderBy('created_at', 'desc')
+                ->get(['*']);
 
             return (new AuditsResponse($audits))
                 ->response()
