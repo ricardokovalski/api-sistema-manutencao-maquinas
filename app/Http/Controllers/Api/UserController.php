@@ -9,6 +9,7 @@ use App\Http\Resources\UserResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Hash;
 
 /**
  * Class UserController
@@ -78,6 +79,8 @@ class UserController extends Controller
     {
         try {
 
+            $request->request->set('password', Hash::make($request->get('password')));
+
             $user = $this->userRepository->create($request->all());
 
             $role = $this->roleRepository->findById($request->get('profile_id'));
@@ -142,6 +145,8 @@ class UserController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         try {
+
+            $request->request->set('password', Hash::make($request->get('password')));
 
             $user = $this->userRepository->update(
                 $request->all(),
