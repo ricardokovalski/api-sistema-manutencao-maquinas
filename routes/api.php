@@ -20,7 +20,7 @@ use Illuminate\Http\Request;
 Route::post('auth/login', 'Api\AuthController@login');
 
 Route::group([
-    'middleware' => 'jwt.verify',
+    'middleware' => '',
 ], function () {
 
     //Route::post('auth/logout', 'Api\AuthController@logout');
