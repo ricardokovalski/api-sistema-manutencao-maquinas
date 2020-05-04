@@ -117,7 +117,7 @@ class FileController extends Controller
 
             $this->fileRepository->delete($id);
 
-            $path = storage_path("app/uploads/machines/{$file->name}");
+            $path = storage_path("app/public/machines/{$file->name}");
 
             @unlink($path);
 

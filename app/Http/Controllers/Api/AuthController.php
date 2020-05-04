@@ -31,14 +31,22 @@ class AuthController extends Controller
         $credentials = $request->only(['email', 'password']);
 
         if ($token = $this->guard()->attempt($credentials)) {
-            return $this->respondWithToken($token);
+
+            $user = $this->guard()->user();
+
+            return response()->json([
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'password' => $user->password,
+                'access_token' => $token,
+                'roles' => $user->roles->all(),
+            ]);
         }
 
-        return response()->json(
-            [
-                'error' => 'Unauthorized'
-            ],401
-        );
+        return response()->json([
+            'error' => 'E-mail e/ou Senha inválido(s).'
+        ],401);
     }
 
     /**
@@ -62,11 +70,9 @@ class AuthController extends Controller
     {
         $this->guard()->logout();
 
-        return response()->json(
-            [
-                'message' => 'Successfully logged out'
-            ]
-        );
+        return response()->json([
+            'message' => 'Successfully logged out'
+        ]);
     }
 
     /**
@@ -90,13 +96,11 @@ class AuthController extends Controller
      */
     protected function respondWithToken($token)
     {
-        return response()->json(
-            [
-                'access_token' => $token,
-                'token_type' => 'bearer',
-                'expires_in' => $this->guard()->factory()->getTTL() * 60
-            ]
-        );
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => $this->guard()->factory()->getTTL() * 60
+        ]);
     }
 
     /**
