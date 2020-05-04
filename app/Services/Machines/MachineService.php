@@ -9,8 +9,10 @@ use App\Repositories\Contracts\MachineRepositoryContract;
 use App\Repositories\Contracts\PeaceRepositoryContract;
 use App\Repositories\Contracts\UserRepositoryContract;
 use App\Services\Contracts\MachineServiceContract;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use OwenIt\Auditing\Models\Audit;
 
 /**
  * Class MachineService
@@ -81,6 +83,22 @@ class MachineService implements MachineServiceContract
         }
 
         $machine->users()->attach($user);
+
+        Audit::create([
+            'event' => 'created',
+            'auditable_type' => 'assignTechnicalManagerFromMachine',
+            'auditable_id' => $machine->id,
+            'old_values' => [],
+            'new_values' => [
+                'machine_id' => $machine->id,
+                'user_id' => $user->id,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            'url' => \OwenIt\Auditing\Resolvers\UrlResolver::resolve(),
+            'ip_address' => \OwenIt\Auditing\Resolvers\IpAddressResolver::resolve(),
+            'user_agent' => \OwenIt\Auditing\Resolvers\UserAgentResolver::resolve(),
+        ]);
 
         return true;
     }
