@@ -126,8 +126,8 @@ class MachineService implements MachineServiceContract
         }
 
         $machine->users()->sync([
-            $user->id => ['deleted_at' => \Carbon\Carbon::now()]
-        ]);
+            $user->id => ['deleted_at' => Carbon::now()]
+        ], false);
 
         return true;
     }
@@ -193,8 +193,8 @@ class MachineService implements MachineServiceContract
         }
 
         $machine->pieces()->sync([
-            $piece->id => ['deleted_at' => \Carbon\Carbon::now()]
-        ]);
+            $piece->id => ['deleted_at' => Carbon::now()]
+        ], false);
 
         return true;
     }
