@@ -64,8 +64,8 @@ class UploadService
         }
     }
 
-    public function storeFile($path = 'uploads/')
+    public function storeFile($path = 'public/')
     {
-        $this->uploadFile->storeAs($path, $this->getNameEncrypt(), 'local');
+        $this->uploadFile->storeAs($path, $this->getNameEncrypt(), 'public');
     }
 }

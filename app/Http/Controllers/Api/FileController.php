@@ -60,7 +60,7 @@ class FileController extends Controller
 
             $this->fileService->storeFile($request->except('archive'));
 
-            $uploadService->storeFile('uploads/machines/');
+            $uploadService->storeFile('machines/');
 
             return response()->json(true, Response::HTTP_OK);
 
@@ -80,9 +80,8 @@ class FileController extends Controller
             $file = $this->fileRepository->findFile($id);
 
             $headers = ['Content-Type: application/pdf'];
-            $path = storage_path("app/uploads/machines/{$file->name}");
 
-            //dd(file_get_contents(storage_path('app/'.$path)));
+            $path = storage_path("app/public/machines/{$file->name}");
 
             return response()->download($path, $file->name, $headers);
 
