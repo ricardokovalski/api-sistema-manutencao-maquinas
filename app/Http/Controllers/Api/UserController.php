@@ -54,6 +54,7 @@ class UserController extends Controller
                 'id',
                 'name',
                 'email',
+                'password',
             ]);
 
             return (new UserResponse($users))
@@ -117,6 +118,7 @@ class UserController extends Controller
                     'id',
                     'name',
                     'email',
+                    'password',
                 ]);
 
             return (new UserResponse($user))
