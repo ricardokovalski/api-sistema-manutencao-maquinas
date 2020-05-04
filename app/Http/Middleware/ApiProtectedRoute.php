@@ -22,26 +22,26 @@ class ApiProtectedRoute extends BaseMiddleware
             if (! $user = JWTAuth::parseToken()->authenticate()) {
                 return response()->json([
                     'User not found'
-                ], 404);
+                ], 401);
             }
         } catch (\Exception $exception) {
 
             if ($exception instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException) {
                 return response()->json([
                     'status' => 'Token is Invalid'
-                ], 404);
+                ], 401);
             }
 
             if ($exception instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException) {
                 return response()->json([
                     'status' => 'Token is Expired'
-                ], 404);
+                ], 401);
             }
 
             if ($exception instanceof Tymon\JWTAuth\Exceptions\JWTException) {
                 return response()->json([
                     'status' => 'Authorization Token not found'
-                ], 404);
+                ], 401);
             }
         }
 

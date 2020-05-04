@@ -37,6 +37,8 @@ class FileController extends Controller
         FileRepositoryContract $fileRepository,
         FileServiceContract $fileService
     ) {
+        $this->middleware('auth:api');
+
         $this->fileRepository = $fileRepository;
         $this->fileService = $fileService;
     }

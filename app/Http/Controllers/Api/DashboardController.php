@@ -25,6 +25,8 @@ class DashboardController extends Controller
     public function __construct(
         DashboardServiceContract $dashboardService
     ) {
+        $this->middleware('auth:api');
+
         $this->dashboardService = $dashboardService;
     }
 

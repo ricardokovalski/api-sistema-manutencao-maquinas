@@ -24,6 +24,8 @@ class MaintenanceController extends Controller
 
     public function __construct(MaintenanceRepositoryContract $maintenanceRepository)
     {
+        $this->middleware('auth:api');
+
         $this->maintenanceRepository = $maintenanceRepository;
     }
 

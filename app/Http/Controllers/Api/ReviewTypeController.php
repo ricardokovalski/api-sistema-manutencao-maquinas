@@ -22,6 +22,8 @@ class ReviewTypeController extends Controller
      */
     public function __construct(ReviewTypeRepositoryContract $reviewTypeRepository)
     {
+        $this->middleware('auth:api');
+
         $this->reviewTypeRepository = $reviewTypeRepository;
     }
 

@@ -26,6 +26,8 @@ class PeaceController extends Controller
      */
     public function __construct(PeaceRepositoryContract $peaceRepository)
     {
+        $this->middleware('auth:api');
+
         $this->peaceRepository = $peaceRepository;
     }
 

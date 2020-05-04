@@ -60,6 +60,8 @@ class MachineController extends Controller
         MachineServiceContract $machineService,
         EmailService $emailService
     ) {
+        $this->middleware('auth:api');
+
         $this->machineRepository = $machineRepository;
         $this->userRepository = $userRepository;
         $this->peaceRepository = $peaceRepository;
