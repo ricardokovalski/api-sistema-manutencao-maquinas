@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Entities\Machine;
 use App\Http\Controllers\Controller;
 use App\Repositories\Contracts\FileRepositoryContract;
 use App\Services\Contracts\FileServiceContract;
@@ -12,12 +11,11 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 /**
- * Class DashboardController
+ * Class FileController
  * @package App\Http\Controllers\Api
  */
 class FileController extends Controller
 {
-
     /**
      * @var FileServiceContract
      */
