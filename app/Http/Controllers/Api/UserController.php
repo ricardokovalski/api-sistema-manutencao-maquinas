@@ -36,9 +36,7 @@ class UserController extends Controller
         UserRepositoryContract $userRepository,
         RoleRepositoryContract $roleRepository
     ) {
-        /*$this->middleware('auth:api', [
-            'except' => ['store']
-        ]);*/
+        $this->middleware('auth:api');
 
         $this->userRepository = $userRepository;
         $this->roleRepository = $roleRepository;
