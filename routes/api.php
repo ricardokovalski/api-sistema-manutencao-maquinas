@@ -17,7 +17,7 @@ use Illuminate\Http\Request;
     return $request->user();
 });*/
 
-Route::get('machines/logs', 'Api\AuditsController@index');
+
 
 Route::post('auth/login', 'Api\AuthController@login');
 
@@ -31,6 +31,8 @@ Route::group([
 
     Route::get('dashboard', 'Api\DashboardController@index');
 
+    Route::get('machines/logs', 'Api\AuditsController@index');
+    
     //Route::get('machines/send-email', 'Api\MachineController@sendEmail');
 
     Route::resource('machines', 'Api\MachineController')->except('create', 'edit');
@@ -50,6 +52,7 @@ Route::group([
     Route::resource('roles', 'Api\RoleController')->except('create', 'edit', 'update', 'destroy');
     Route::resource('technical-managers', 'Api\TechnicalManagerController')->except('create', 'edit');
     Route::resource('users', 'Api\UserController')->except('create', 'edit');
+
 });
 
 
