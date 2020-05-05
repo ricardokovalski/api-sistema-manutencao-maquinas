@@ -18,4 +18,6 @@ interface MachineRepositoryContract extends RepositoryInterface
     public function getTotalYellow(Carbon $currentDate);
 
     public function getTotalGreen(Carbon $currentDate);
+
+    public function getMachinesPeriodMaintenance();
 }

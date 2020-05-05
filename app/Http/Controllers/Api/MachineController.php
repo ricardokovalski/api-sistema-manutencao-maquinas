@@ -395,25 +395,4 @@ class MachineController extends Controller
 
         }
     }
-
-    public function sendEmail()
-    {
-        try {
-
-            $job = new SendEmail([
-                'nameTo' => 'Teste Teste',
-                'emailTo' => 'teste@gmail.com'
-            ]);
-            $this->dispatch($job);
-
-            return response()->json(true, Response::HTTP_OK);
-
-        } catch (\Exception $exception) {
-
-            return response()->json([
-                'error' => $exception->getMessage()
-            ], Response::HTTP_BAD_REQUEST);
-
-        }
-    }
 }

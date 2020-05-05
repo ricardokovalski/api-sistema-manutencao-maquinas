@@ -118,6 +118,40 @@ class MachineRepository extends BaseRepository implements MachineRepositoryContr
                     where maintenance.machine_id = machines.id)) 
                     < (machines.review_period - machines.warning_period)', [$currentDate->toDateString()]);
         })->count();
+    }
 
+    public function getMachinesPeriodMaintenance()
+    {
+        $currentDate = Carbon::now();
+
+        if (env('DB_CONNECTION') === 'mysql') {
+            return $this->model->where(function (Builder $query) use ($currentDate) {
+                $query->whereRaw('datediff(?, (
+                    select MAX(maintenance.review_at)
+                    from maintenance
+                    where maintenance.machine_id = machines.id
+                    )) > (machines.review_period - machines.warning_period)', [$currentDate->toDateString()]
+                )->whereRaw('datediff(?, (
+                    select MAX(maintenance.review_at)
+                    from maintenance
+                    where maintenance.machine_id = machines.id
+                    )) < machines.review_period', [$currentDate->toDateString()]
+                );
+            })->get();
+        }
+
+        return $this->model->where(function (Builder $query) use ($currentDate) {
+            $query->whereRaw('(? - 
+                (select MAX(maintenance.review_at)
+                from maintenance
+                where maintenance.machine_id = machines.id)) 
+                > (machines.review_period - machines.warning_period)', [$currentDate->toDateString()]
+            )->whereRaw('(? - 
+                (select MAX(maintenance.review_at)
+                from maintenance
+                where maintenance.machine_id = machines.id)) 
+                < machines.review_period', [$currentDate->toDateString()]
+            );
+        })->get();
     }
 }

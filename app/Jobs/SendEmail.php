@@ -29,15 +29,20 @@ class SendEmail implements ShouldQueue
      */
     public function handle(EmailService $emailService)
     {
-        $emailService->setTitle('Notificação de manutenção')
-            ->setNameTo($this->formData->nameTo)
-            ->setEmailTo($this->formData->emailTo)
-            ->setNameFrom(config('mail.from.name'))
-            ->setEmailFrom(config('mail.from.address'))
-            ->setTemplate('admin.email.machine')
-            ->setBody([
-                'content' => 'Teste 123'
-            ])
-            ->sendEmail();
+        foreach ($this->formData->users as $user) {
+
+            $emailService->setTitle('Notificação de manutenção')
+                ->setNameTo($user['nameTo'])
+                ->setEmailTo($user['emailTo'])
+                ->setNameFrom(config('mail.from.name'))
+                ->setEmailFrom(config('mail.from.address'))
+                ->setTemplate('admin.email.machine')
+                ->setBody([
+                    'technical' => $user['nameTo'],
+                    'machine' => $this->formData->machine
+                ])
+                ->sendEmail();
+        }
+
     }
 }
