@@ -26,7 +26,7 @@ class AuditsController extends Controller
      */
     public function __construct(AuditRepositoryContract $auditRepository)
     {
-        //$this->middleware('auth:api');
+        $this->middleware('auth:api');
 
         $this->auditRepository = $auditRepository;
     }

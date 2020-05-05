@@ -32,7 +32,7 @@ Route::group([
     Route::get('dashboard', 'Api\DashboardController@index');
 
     Route::get('machines/logs', 'Api\AuditsController@index');
-    
+
     //Route::get('machines/send-email', 'Api\MachineController@sendEmail');
 
     Route::resource('machines', 'Api\MachineController')->except('create', 'edit');
