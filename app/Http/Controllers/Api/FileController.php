@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\Contracts\FileRepositoryContract;
+use App\Services\Contracts\AuditServiceContract;
 use App\Services\Contracts\FileServiceContract;
 use App\Services\UploadService;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -73,6 +75,10 @@ class FileController extends Controller
         }
     }
 
+    /**
+     * @param $id
+     * @return JsonResponse|\Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
     public function show($id)
     {
         try {
@@ -102,24 +108,7 @@ class FileController extends Controller
     {
         try {
 
-            $file = $this->fileRepository->findFile($id);
-
-            /**
-             * Remove o vínculo das máquinas com a peça a ser deletada
-             */
-            $machinesFromFile = $file->machines->keyBy('id')->map(function() {
-                return [
-                    'deleted_at' => \Carbon\Carbon::now()
-                ];
-            })->toArray();
-
-            $file->machines()->sync($machinesFromFile, false);
-
-            $this->fileRepository->delete($id);
-
-            $path = storage_path("app/public/machines/{$file->name}");
-
-            @unlink($path);
+            $this->fileService->deleteFile($id);
 
             return response()->json(true, Response::HTTP_OK);
 

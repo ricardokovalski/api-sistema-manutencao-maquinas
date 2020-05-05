@@ -4,10 +4,13 @@ namespace App\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
+use OwenIt\Auditing\Auditable;
 
-class File extends Model
+class File extends Model implements AuditableContract
 {
     use SoftDeletes;
+    use Auditable;
 
     /**
      * The attributes that are mass assignable.

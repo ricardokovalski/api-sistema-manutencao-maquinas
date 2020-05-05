@@ -8,12 +8,11 @@ use App\Exceptions\UserException;
 use App\Repositories\Contracts\MachineRepositoryContract;
 use App\Repositories\Contracts\PeaceRepositoryContract;
 use App\Repositories\Contracts\UserRepositoryContract;
-use App\Services\AuditService;
+use App\Services\Contracts\AuditServiceContract;
 use App\Services\Contracts\MachineServiceContract;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use OwenIt\Auditing\Models\Audit;
 
 /**
  * Class MachineService
@@ -37,27 +36,19 @@ class MachineService implements MachineServiceContract
     private $peaceRepository;
 
     /**
-     * @var AuditService
-     */
-    private $auditService;
-
-    /**
      * MachineService constructor.
      * @param MachineRepositoryContract $machineRepository
      * @param UserRepositoryContract $userRepository
      * @param PeaceRepositoryContract $peaceRepository
-     * @param AuditService $auditService
      */
     public function __construct(
         MachineRepositoryContract $machineRepository,
         UserRepositoryContract $userRepository,
-        PeaceRepositoryContract $peaceRepository,
-        AuditService $auditService
+        PeaceRepositoryContract $peaceRepository
     ) {
         $this->machineRepository = $machineRepository;
         $this->userRepository = $userRepository;
         $this->peaceRepository = $peaceRepository;
-        $this->auditService = $auditService;
     }
 
     /**
@@ -93,7 +84,7 @@ class MachineService implements MachineServiceContract
 
         $machine->users()->attach($user);
 
-        $this->auditService->create([
+        app(AuditServiceContract::class)->create([
             'event' => 'created',
             'auditable_type' => 'assignTechnicalManagerFromMachine',
             'auditable_id' => $machine->id,
@@ -131,13 +122,9 @@ class MachineService implements MachineServiceContract
             throw new UserException('Usuário não encontrado.', Response::HTTP_NOT_FOUND);
         }
 
-        $machine->users()->sync([
-            $user->id => ['deleted_at' => Carbon::now()]
-        ], false);
-
         $pivot = $machine->users()->where('user_id', $user->id)->first()->pivot;
 
-        $this->auditService->create([
+        app(AuditServiceContract::class)->create([
             'event' => 'deleted',
             'auditable_type' => 'removeTechnicalManagerFromMachine',
             'auditable_id' => $pivot->machine_id,
@@ -151,6 +138,10 @@ class MachineService implements MachineServiceContract
                 'deleted_at' => Carbon::now()->toDateTimeString(),
             ],
         ]);
+
+        $machine->users()->sync([
+            $user->id => ['deleted_at' => Carbon::now()]
+        ], false);
 
         return true;
     }
@@ -190,8 +181,8 @@ class MachineService implements MachineServiceContract
             'minimal_quantity' => $request->get('minimal_quantity'),
         ]);
 
-        $this->auditService->create([
-            'event' => 'deleted',
+        app(AuditServiceContract::class)->create([
+            'event' => 'created',
             'auditable_type' => 'assignPieceFromMachine',
             'auditable_id' => $machine->id,
             'old_values' => [],
@@ -229,13 +220,9 @@ class MachineService implements MachineServiceContract
             throw new PieceException('Peça não encontrada.', Response::HTTP_NOT_FOUND);
         }
 
-        $machine->pieces()->sync([
-            $piece->id => ['deleted_at' => Carbon::now()]
-        ], false);
-
         $pivot = $machine->pieces()->where('piece_id', $piece->id)->first()->pivot;
 
-        $this->auditService->create([
+        app(AuditServiceContract::class)->create([
             'event' => 'deleted',
             'auditable_type' => 'removePieceFromMachine',
             'auditable_id' => $pivot->machine_id,
@@ -250,6 +237,10 @@ class MachineService implements MachineServiceContract
                 'deleted_at' => Carbon::now()->toDateTimeString(),
             ],
         ]);
+
+        $machine->pieces()->sync([
+            $piece->id => ['deleted_at' => Carbon::now()]
+        ], false);
 
         return true;
     }

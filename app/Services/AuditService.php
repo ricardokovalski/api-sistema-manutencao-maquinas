@@ -2,12 +2,15 @@
 
 namespace App\Services;
 
+use App\Entities\User;
 use App\Exceptions\AuditException;
 use App\Repositories\Contracts\AuditRepositoryContract;
+use App\Services\Contracts\AuditServiceContract;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use OwenIt\Auditing\Resolvers\{UrlResolver, IpAddressResolver, UserAgentResolver};
 
-class AuditService
+class AuditService implements AuditServiceContract
 {
     /**
      * @var AuditRepositoryContract
@@ -49,6 +52,8 @@ class AuditService
     private function makeDefaultSettings()
     {
         return array(
+            'user_type' => User::class,
+            'user_id' => Auth::guard()->user()->id,
             'url' => UrlResolver::resolve(),
             'ip_address' => IpAddressResolver::resolve(),
             'user_agent' => UserAgentResolver::resolve(),

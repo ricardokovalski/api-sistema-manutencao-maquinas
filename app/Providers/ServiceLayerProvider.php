@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Services\AuditService;
+use App\Services\Contracts\AuditServiceContract;
 use App\Services\Contracts\DashboardServiceContract;
 use App\Services\Contracts\FileServiceContract;
 use App\Services\Contracts\MachineServiceContract;
@@ -29,6 +31,8 @@ class ServiceLayerProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->app->bind(AuditServiceContract::class, AuditService::class);
+
         $this->app->bind(DashboardServiceContract::class, DashboardService::class);
 
         $this->app->bind(FileServiceContract::class, FileService::class);

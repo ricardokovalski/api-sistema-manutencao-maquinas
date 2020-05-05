@@ -3,13 +3,17 @@
 namespace App\Entities;
 
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
+use OwenIt\Auditing\Auditable;
 
 /**
  * Class Maintenance
  * @package App\Entities
  */
-class Maintenance extends Model
+class Maintenance extends Model implements AuditableContract
 {
+    use Auditable;
+
     public $table = 'maintenance';
 
     /**
