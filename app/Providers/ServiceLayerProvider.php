@@ -7,9 +7,11 @@ use App\Services\Contracts\AuditServiceContract;
 use App\Services\Contracts\DashboardServiceContract;
 use App\Services\Contracts\FileServiceContract;
 use App\Services\Contracts\MachineServiceContract;
+use App\Services\Contracts\MaintenanceServiceContract;
 use App\Services\DashboardService;
 use App\Services\Files\FileService;
 use App\Services\Machines\MachineService;
+use App\Services\Maintenance\MaintenanceService;
 use Illuminate\Support\ServiceProvider;
 
 class ServiceLayerProvider extends ServiceProvider
@@ -38,5 +40,7 @@ class ServiceLayerProvider extends ServiceProvider
         $this->app->bind(FileServiceContract::class, FileService::class);
 
         $this->app->bind(MachineServiceContract::class, MachineService::class);
+
+        $this->app->bind(MaintenanceServiceContract::class, MaintenanceService::class);
     }
 }

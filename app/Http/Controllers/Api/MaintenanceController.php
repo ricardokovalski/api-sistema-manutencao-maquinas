@@ -10,6 +10,9 @@ use App\Repositories\Maintenance\Criteria\FilterByReviewTypeCriteria;
 use App\Repositories\Maintenance\Criteria\FilterByTechnicalManagerCriteria;
 use App\Repositories\Maintenance\Criteria\JoinMachinesCriteria;
 use App\Repositories\Maintenance\Criteria\OrderByMachinesCriteria;
+use App\Services\Contracts\AuditServiceContract;
+use App\Services\Contracts\MaintenanceServiceContract;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -20,13 +23,29 @@ use Illuminate\Http\Response;
  */
 class MaintenanceController extends Controller
 {
+    /**
+     * @var MaintenanceRepositoryContract
+     */
     protected $maintenanceRepository;
 
-    public function __construct(MaintenanceRepositoryContract $maintenanceRepository)
-    {
+    /**
+     * @var MaintenanceServiceContract
+     */
+    private $maintenanceService;
+
+    /**
+     * MaintenanceController constructor.
+     * @param MaintenanceRepositoryContract $maintenanceRepository
+     * @param MaintenanceServiceContract $maintenanceService
+     */
+    public function __construct(
+        MaintenanceRepositoryContract $maintenanceRepository,
+        MaintenanceServiceContract $maintenanceService
+    ) {
         $this->middleware('auth:api');
 
         $this->maintenanceRepository = $maintenanceRepository;
+        $this->maintenanceService = $maintenanceService;
     }
 
     /**
@@ -92,11 +111,13 @@ class MaintenanceController extends Controller
 
             $maintenance = $this->maintenanceRepository->create($data);
 
-            $maintenance->pieces()->attach($request->get('piece_id'), [
-                'amount_used' => $request->get('amount_used'),
-            ]);
+            if (! $maintenance) {
+                throw new \Exception('Não foi possível realizar a manutenção.', Response::HTTP_NOT_FOUND);
+            }
 
-            return (new MaintenanceResponse($maintenance))
+            $this->maintenanceService->assignPieceFromMaintenance($maintenance, $request->only('piece_id', 'amount_used'));
+
+            return (new MaintenanceResponse($maintenance->fresh('pieces')))
                 ->response()
                 ->setStatusCode(Response::HTTP_CREATED);
 
