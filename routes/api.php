@@ -17,6 +17,8 @@ use Illuminate\Http\Request;
     return $request->user();
 });*/
 
+Route::get('machines/logs', 'Api\AuditsController@index');
+
 Route::post('auth/login', 'Api\AuthController@login');
 
 Route::group([
@@ -50,4 +52,4 @@ Route::group([
     Route::resource('users', 'Api\UserController')->except('create', 'edit');
 });
 
-Route::resource('logs', 'Api\AuditsController')->except('create', 'store', 'show', 'edit', 'update', 'destroy');
+
