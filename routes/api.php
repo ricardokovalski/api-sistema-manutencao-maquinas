@@ -48,5 +48,6 @@ Route::group([
     Route::resource('roles', 'Api\RoleController')->except('create', 'edit', 'update', 'destroy');
     Route::resource('technical-managers', 'Api\TechnicalManagerController')->except('create', 'edit');
     Route::resource('users', 'Api\UserController')->except('create', 'edit');
-    Route::resource('logs', 'Api\AuditsController')->except('create', 'store', 'show', 'edit', 'update', 'destroy');
 });
+
+Route::resource('logs', 'Api\AuditsController')->except('create', 'store', 'show', 'edit', 'update', 'destroy');
