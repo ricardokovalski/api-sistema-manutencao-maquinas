@@ -47,6 +47,10 @@ class CheckMachines extends Command
     {
         $machines = $this->machineRepository->getMachinesPeriodMaintenance();
 
+        $ids = implode(",", $machines->pluck('id')->toArray());
+
+        $this->info("Máquinas a serem notificadas: {$ids}");
+
         foreach ($machines as $machine) {
 
             $users = $machine->users->map(function($item) {
@@ -55,6 +59,8 @@ class CheckMachines extends Command
                     'emailTo' => $item->email,
                 );
             })->toArray();
+
+            $this->info("Enviando email para os seguintes responsáveis:{$users}");
 
             $this->dispatch(new SendEmail([
                 'users' => $users,
