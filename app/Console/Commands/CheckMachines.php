@@ -49,18 +49,17 @@ class CheckMachines extends Command
 
         $ids = implode(",", $machines->pluck('id')->toArray());
 
-        $this->info("Máquinas a serem notificadas: {$ids}");
+        $this->info("IDS de máquinas a serem notificadas: {$ids}");
 
         foreach ($machines as $machine) {
 
             $users = $machine->users->map(function($item) {
+                $this->info("Enviando notificação para {$item->email} - {$item->name}");
                 return array(
                     'nameTo' => $item->name,
                     'emailTo' => $item->email,
                 );
             })->toArray();
-
-            $this->info("Enviando email para os seguintes responsáveis:{$users}");
 
             $this->dispatch(new SendEmail([
                 'users' => $users,
