@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 interface MachineServiceContract
 {
+    public function storeMachine(Request $request);
+
     public function assignTechnicalManagerFromMachine(Request $request);
 
     public function removeTechnicalManagerFromMachine(Request $request);

@@ -53,6 +53,26 @@ class MachineService implements MachineServiceContract
 
     /**
      * @param Request $request
+     * @return mixed
+     * @throws MachineException
+     */
+    public function storeMachine(Request $request)
+    {
+        $data = $request->only('name', 'description', 'technical', 'patrimony');
+
+        $schedules = $request->get('review_period');
+
+        $machine = $this->machineRepository->create($data);
+
+        if (! $machine) {
+            throw new MachineException('Não foi possível completar o cadastro da máquina.', Response::HTTP_NOT_FOUND);
+        }
+
+        return $machine;
+    }
+
+    /**
+     * @param Request $request
      * @return bool
      * @throws MachineException
      * @throws UserException
