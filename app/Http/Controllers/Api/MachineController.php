@@ -70,7 +70,16 @@ class MachineController extends Controller
     }
 
     /**
-     * @return JsonResponse
+     * @OA\Get(
+     *     tags={"Machines"},
+     *     path="/api/machines",
+     *     summary="List of machines",
+     *     description="Return a list of machines",
+     *     @OA\Response(response="200", description="An json"),
+     *      security={
+     *           {"apiKey": {}}
+     *       }
+     * )
      */
     public function index(): JsonResponse
     {
@@ -135,6 +144,52 @@ class MachineController extends Controller
     }
 
     /**
+     * @OA\Post(
+     *      tags={"Machines"},
+     *      path="/api/machines",
+     *      summary="Store a machine",
+     *      description="Return a machine",
+     *      @OA\Parameter(
+     *          name="name",
+     *          description="Name field",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="description",
+     *          description="Description",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="technical",
+     *          description="Technical",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="patrimony",
+     *          description="Patrimony",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *      ),
+     *     @OA\Response(response="200", description="Store machine"),
+     *      security={
+     *           {"apiKey": {}}
+     *      }
+     * )
      * @param Request $request
      * @return JsonResponse
      */
@@ -158,6 +213,26 @@ class MachineController extends Controller
     }
 
     /**
+     * @OA\Get(
+     *     tags={"Machines"},
+     *     path="/api/machines/{id}",
+     *     operationId="getMachineById",
+     *     @OA\Parameter(
+     *          name ="id",
+     *          in = "path",
+     *          description = "ID of machine to return",
+     *          required = true,
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *     ),
+     *     summary="Show a machine",
+     *     description="Return a machine",
+     *     @OA\Response(response="200", description="An json"),
+     *     security={
+     *           {"apiKey": {}}
+     *     }
+     * )
      * @param $id
      * @return JsonResponse
      */
@@ -223,6 +298,62 @@ class MachineController extends Controller
     }
 
     /**
+     * @OA\Put(
+     *      tags={"Machines"},
+     *      path="/api/machines/{id}",
+     *      summary="Update a machine",
+     *      description="Update a machine",
+     *      operationId="getMachineById",
+     *      @OA\Parameter(
+     *          name ="id",
+     *          in = "path",
+     *          description = "ID of machine to return",
+     *          required = true,
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="name",
+     *          description="Name field",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="description",
+     *          description="Description",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="technical",
+     *          description="Technical",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="patrimony",
+     *          description="Patrimony",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *      ),
+     *     @OA\Response(response="200", description="Update machine"),
+     *      security={
+     *           {"apiKey": {}}
+     *      }
+     * )
      * @param Request $request
      * @param $id
      * @return JsonResponse
@@ -231,10 +362,7 @@ class MachineController extends Controller
     {
         try {
 
-            $machine = $this->machineRepository->update(
-                $request->all(),
-                $id
-            );
+            $machine = $this->machineService->updateMachine($request, $id);
 
             return (new MachineResponse($machine))
                 ->response()
@@ -250,6 +378,26 @@ class MachineController extends Controller
     }
 
     /**
+     * @OA\Delete(
+     *     tags={"Machines"},
+     *     path="/api/machines/{id}",
+     *     operationId="getMachineById",
+     *     @OA\Parameter(
+     *          name ="id",
+     *          in = "path",
+     *          description = "ID of machine to return",
+     *          required = true,
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *     ),
+     *     summary="Delete a machine",
+     *     description="Delete a machine",
+     *     @OA\Response(response="200", description="An json"),
+     *     security={
+     *           {"apiKey": {}}
+     *     }
+     * )
      * @param $id
      * @return JsonResponse
      */
@@ -313,6 +461,34 @@ class MachineController extends Controller
     }
 
     /**
+     * @OA\Post(
+     *      tags={"Machines"},
+     *      path="/api/machines/technical-manager",
+     *      summary="Assign a Technical-manager in a machine",
+     *      description="Return a boolean",
+     *      @OA\Parameter(
+     *          name="machine_id",
+     *          description="ID of machine",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="user_id",
+     *          description="ID of technical-manager",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *     @OA\Response(response="200", description="An boolean"),
+     *      security={
+     *           {"apiKey": {}}
+     *      }
+     * )
      * @param Request $request
      * @return JsonResponse
      */
@@ -334,6 +510,35 @@ class MachineController extends Controller
     }
 
     /**
+     * /**
+     * @OA\Post(
+     *      tags={"Machines"},
+     *      path="/api/machines/technical-manager/remove",
+     *      summary="Remove a Technical-manager from machine",
+     *      description="Return a boolean",
+     *      @OA\Parameter(
+     *          name="machine_id",
+     *          description="ID of machine",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="user_id",
+     *          description="ID of technical-manager",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *     @OA\Response(response="200", description="An boolean"),
+     *      security={
+     *           {"apiKey": {}}
+     *      }
+     * )
      * @param Request $request
      * @return JsonResponse
      */
@@ -355,6 +560,43 @@ class MachineController extends Controller
     }
 
     /**
+     * @OA\Post(
+     *      tags={"Machines"},
+     *      path="/api/machines/piece",
+     *      summary="Assign a Piece in a machine",
+     *      description="Return a boolean",
+     *      @OA\Parameter(
+     *          name="machine_id",
+     *          description="ID of machine",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="piece_id",
+     *          description="ID of piece",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="minimal_quantity",
+     *          description="minimal quantity of pieces",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *     @OA\Response(response="200", description="An boolean"),
+     *      security={
+     *           {"apiKey": {}}
+     *      }
+     * )
      * @param Request $request
      * @return JsonResponse
      */
@@ -376,6 +618,34 @@ class MachineController extends Controller
     }
 
     /**
+     * @OA\Post(
+     *      tags={"Machines"},
+     *      path="/api/machines/piece/remove",
+     *      summary="Remove a Piece from machine",
+     *      description="Return a boolean",
+     *      @OA\Parameter(
+     *          name="machine_id",
+     *          description="ID of machine",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *      @OA\Parameter(
+     *          name="piece_id",
+     *          description="ID of piece",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *     @OA\Response(response="200", description="An boolean"),
+     *      security={
+     *           {"apiKey": {}}
+     *      }
+     * )
      * @param Request $request
      * @return JsonResponse
      */
@@ -384,6 +654,46 @@ class MachineController extends Controller
         try {
 
             $this->machineService->removePieceFromMachine($request);
+
+            return response()->json(true, Response::HTTP_OK);
+
+        } catch (\Exception $exception) {
+
+            return response()->json([
+                'error' => $exception->getMessage()
+            ], Response::HTTP_BAD_REQUEST);
+
+        }
+    }
+
+    /**
+     * @OA\Post(
+     *      tags={"Machines"},
+     *      path="/api/machines/schedule/remove",
+     *      summary="Remove schedules from machine",
+     *      description="Return a boolean",
+     *      @OA\Parameter(
+     *          name="machine_id",
+     *          description="ID of machine",
+     *          required=true,
+     *          in="query",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *     @OA\Response(response="200", description="An boolean"),
+     *      security={
+     *           {"apiKey": {}}
+     *      }
+     * )
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function removeSchedule(Request $request): JsonResponse
+    {
+        try {
+
+            $this->machineService->removeScheduleFromMachine($request);
 
             return response()->json(true, Response::HTTP_OK);
 

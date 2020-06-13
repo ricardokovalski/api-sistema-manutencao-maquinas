@@ -90,6 +90,34 @@ class MachineService implements MachineServiceContract
 
     /**
      * @param Request $request
+     * @param $id
+     * @return mixed
+     * @throws MachineException
+     */
+    public function updateMachine(Request $request, $id)
+    {
+        $data = $request->only('name', 'description', 'technical', 'patrimony');
+
+        $schedules = $request->get('review_period');
+
+        $machine = $this->machineRepository->update($data, $id);
+
+        if (! $machine) {
+            throw new MachineException('Não foi possível completar a edição da máquina.', Response::HTTP_NOT_FOUND);
+        }
+
+        foreach ($schedules as $schedule) {
+            $this->scheduleRepository->create([
+                'date' => $schedule,
+                'machine_id' => $machine->id
+            ]);
+        }
+
+        return $machine->fresh('schedules');
+    }
+
+    /**
+     * @param Request $request
      * @return bool
      * @throws MachineException
      * @throws UserException
@@ -278,6 +306,29 @@ class MachineService implements MachineServiceContract
         $machine->pieces()->sync([
             $piece->id => ['deleted_at' => Carbon::now()]
         ], false);
+
+        return true;
+    }
+
+    /**
+     * @param Request $request
+     * @return bool
+     * @throws MachineException
+     */
+    public function removeScheduleFromMachine(Request $request)
+    {
+        $machine = $this->machineRepository
+            ->findMachine($request->get('machine_id'));
+
+        if (! $machine) {
+            throw new MachineException('Máquina não encontrada.', Response::HTTP_NOT_FOUND);
+        }
+
+        if (! $machine->schedules()->first()) {
+            throw new \Exception("Não existem agendamentos para esta máquina.", Response::HTTP_NOT_FOUND);
+        }
+
+        $machine->schedules()->delete();
 
         return true;
     }

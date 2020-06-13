@@ -6,6 +6,21 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 
+/**
+ * @OA\Info(
+ *      version="1.0.0",
+ *      title="API RESTFUL Laravel 6.0",
+ *      description="API documentation project",
+ *      @OA\Contact(
+ *          email="ricardokovalskicruz@gmail.com"
+ *      ),
+ *     @OA\License(
+ *         name="Apache 2.0",
+ *         url="http://www.apache.org/licenses/LICENSE-2.0.html"
+ *     )
+ * )
+ */
+
 class AuthController extends Controller
 {
     /**

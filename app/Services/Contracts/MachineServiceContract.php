@@ -8,6 +8,8 @@ interface MachineServiceContract
 {
     public function storeMachine(Request $request);
 
+    public function updateMachine(Request $request, $id);
+
     public function assignTechnicalManagerFromMachine(Request $request);
 
     public function removeTechnicalManagerFromMachine(Request $request);
@@ -15,4 +17,6 @@ interface MachineServiceContract
     public function assignPieceFromMachine(Request $request);
 
     public function removePieceFromMachine(Request $request);
+
+    public function removeScheduleFromMachine(Request $request);
 }

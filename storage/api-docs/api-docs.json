@@ -1,0 +1,418 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API RESTFUL Laravel 6.0",
+        "description": "API documentation project",
+        "contact": {
+            "email": "ricardokovalskicruz@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/machines": {
+            "get": {
+                "tags": [
+                    "Machines"
+                ],
+                "summary": "List of machines",
+                "description": "Return a list of machines",
+                "operationId": "App\\Http\\Controllers\\Api\\MachineController::index",
+                "responses": {
+                    "200": {
+                        "description": "An json"
+                    }
+                },
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Machines"
+                ],
+                "summary": "Store a machine",
+                "description": "Return a machine",
+                "operationId": "App\\Http\\Controllers\\Api\\MachineController::store",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Name field",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "description",
+                        "in": "query",
+                        "description": "Description",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "technical",
+                        "in": "query",
+                        "description": "Technical",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "patrimony",
+                        "in": "query",
+                        "description": "Patrimony",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Store machine"
+                    }
+                },
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ]
+            }
+        },
+        "/api/machines/{id}": {
+            "get": {
+                "tags": [
+                    "Machines"
+                ],
+                "summary": "Show a machine",
+                "description": "Return a machine",
+                "operationId": "getMachineById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of machine to return",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "An json"
+                    }
+                },
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Machines"
+                ],
+                "summary": "Update a machine",
+                "description": "Update a machine",
+                "operationId": "getMachineById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of machine to return",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Name field",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "description",
+                        "in": "query",
+                        "description": "Description",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "technical",
+                        "in": "query",
+                        "description": "Technical",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "patrimony",
+                        "in": "query",
+                        "description": "Patrimony",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Update machine"
+                    }
+                },
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Machines"
+                ],
+                "summary": "Delete a machine",
+                "description": "Delete a machine",
+                "operationId": "getMachineById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of machine to return",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "An json"
+                    }
+                },
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ]
+            }
+        },
+        "/api/machines/technical-manager": {
+            "post": {
+                "tags": [
+                    "Machines"
+                ],
+                "summary": "Assign a Technical-manager in a machine",
+                "description": "Return a boolean",
+                "operationId": "App\\Http\\Controllers\\Api\\MachineController::assignUser",
+                "parameters": [
+                    {
+                        "name": "machine_id",
+                        "in": "query",
+                        "description": "ID of machine",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "user_id",
+                        "in": "query",
+                        "description": "ID of technical-manager",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "An boolean"
+                    }
+                },
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ]
+            }
+        },
+        "/api/machines/technical-manager/remove": {
+            "post": {
+                "tags": [
+                    "Machines"
+                ],
+                "summary": "Remove a Technical-manager from machine",
+                "description": "Return a boolean",
+                "operationId": "App\\Http\\Controllers\\Api\\MachineController::removeUser",
+                "parameters": [
+                    {
+                        "name": "machine_id",
+                        "in": "query",
+                        "description": "ID of machine",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "user_id",
+                        "in": "query",
+                        "description": "ID of technical-manager",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "An boolean"
+                    }
+                },
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ]
+            }
+        },
+        "/api/machines/piece": {
+            "post": {
+                "tags": [
+                    "Machines"
+                ],
+                "summary": "Assign a Piece in a machine",
+                "description": "Return a boolean",
+                "operationId": "App\\Http\\Controllers\\Api\\MachineController::assignPiece",
+                "parameters": [
+                    {
+                        "name": "machine_id",
+                        "in": "query",
+                        "description": "ID of machine",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "piece_id",
+                        "in": "query",
+                        "description": "ID of piece",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "minimal_quantity",
+                        "in": "query",
+                        "description": "minimal quantity of pieces",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "An boolean"
+                    }
+                },
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ]
+            }
+        },
+        "/api/machines/piece/remove": {
+            "post": {
+                "tags": [
+                    "Machines"
+                ],
+                "summary": "Remove a Piece from machine",
+                "description": "Return a boolean",
+                "operationId": "App\\Http\\Controllers\\Api\\MachineController::removePiece",
+                "parameters": [
+                    {
+                        "name": "machine_id",
+                        "in": "query",
+                        "description": "ID of machine",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "piece_id",
+                        "in": "query",
+                        "description": "ID of piece",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "An boolean"
+                    }
+                },
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ]
+            }
+        },
+        "/api/machines/schedule/remove": {
+            "post": {
+                "tags": [
+                    "Machines"
+                ],
+                "summary": "Remove schedules from machine",
+                "description": "Return a boolean",
+                "operationId": "App\\Http\\Controllers\\Api\\MachineController::removeSchedule",
+                "parameters": [
+                    {
+                        "name": "machine_id",
+                        "in": "query",
+                        "description": "ID of machine",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "An boolean"
+                    }
+                },
+                "security": [
+                    {
+                        "apiKey": []
+                    }
+                ]
+            }
+        }
+    }
+}

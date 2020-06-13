@@ -17,11 +17,7 @@ use Illuminate\Http\Request;
     return $request->user();
 });*/
 
-
-
 Route::post('auth/login', 'Api\AuthController@login');
-
-Route::get('dashboard', 'Api\DashboardController@index');
 
 Route::group([
     'middleware' => 'jwt.verify',
@@ -31,7 +27,7 @@ Route::group([
     //Route::post('auth/refresh', 'Api\AuthController@refresh');
     //Route::post('auth/me', 'Api\AuthController@me');
 
-
+    Route::get('dashboard', 'Api\DashboardController@index');
 
     Route::get('machines/logs', 'Api\AuditsController@index');
 
@@ -44,6 +40,8 @@ Route::group([
 
     Route::post('machines/piece', 'Api\MachineController@assignPiece');
     Route::post('machines/piece/remove', 'Api\MachineController@removePiece');
+
+    Route::post('machines/schedule/remove', 'Api\MachineController@removeSchedule');
 
     Route::resource('files', 'Api\FileController')->except('index', 'create', 'edit', 'update');
 
