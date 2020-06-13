@@ -7,6 +7,7 @@ use App\Exceptions\PieceException;
 use App\Exceptions\UserException;
 use App\Repositories\Contracts\MachineRepositoryContract;
 use App\Repositories\Contracts\PeaceRepositoryContract;
+use App\Repositories\Contracts\ScheduleRepositoryContract;
 use App\Repositories\Contracts\UserRepositoryContract;
 use App\Services\Contracts\AuditServiceContract;
 use App\Services\Contracts\MachineServiceContract;
@@ -36,25 +37,34 @@ class MachineService implements MachineServiceContract
     private $peaceRepository;
 
     /**
+     * @var ScheduleRepositoryContract
+     */
+    private $scheduleRepository;
+
+    /**
      * MachineService constructor.
      * @param MachineRepositoryContract $machineRepository
      * @param UserRepositoryContract $userRepository
      * @param PeaceRepositoryContract $peaceRepository
+     * @param ScheduleRepositoryContract $scheduleRepository
      */
     public function __construct(
         MachineRepositoryContract $machineRepository,
         UserRepositoryContract $userRepository,
-        PeaceRepositoryContract $peaceRepository
+        PeaceRepositoryContract $peaceRepository,
+        ScheduleRepositoryContract $scheduleRepository
     ) {
         $this->machineRepository = $machineRepository;
         $this->userRepository = $userRepository;
         $this->peaceRepository = $peaceRepository;
+        $this->scheduleRepository = $scheduleRepository;
     }
 
     /**
      * @param Request $request
      * @return mixed
      * @throws MachineException
+     * @throws \Exception
      */
     public function storeMachine(Request $request)
     {
@@ -68,7 +78,14 @@ class MachineService implements MachineServiceContract
             throw new MachineException('Não foi possível completar o cadastro da máquina.', Response::HTTP_NOT_FOUND);
         }
 
-        return $machine;
+        foreach ($schedules as $schedule) {
+            $this->scheduleRepository->create([
+                'date' => (Carbon::instance(new \DateTime($schedule)))->toDateTimeString(),
+                'machine_id' => $machine->id
+            ]);
+        }
+
+        return $machine->fresh('schedules');
     }
 
     /**

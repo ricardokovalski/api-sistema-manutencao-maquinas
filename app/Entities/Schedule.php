@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Schedule extends Model
 {
+    public $timestamps = false;
+
+    protected $table = 'machine_schedules';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -15,6 +19,8 @@ class Schedule extends Model
         'machine_id',
         'date',
     ];
+
+
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

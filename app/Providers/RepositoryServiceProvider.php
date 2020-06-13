@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Repositories\Audit\AuditRepository;
+use App\Repositories\Audits\AuditRepository;
 use App\Repositories\Contracts\AuditRepositoryContract;
 use App\Repositories\Contracts\FileRepositoryContract;
 use App\Repositories\Contracts\MachineRepositoryContract;
@@ -11,6 +11,7 @@ use App\Repositories\Contracts\PeaceRepositoryContract;
 use App\Repositories\Contracts\PermissionRepositoryContract;
 use App\Repositories\Contracts\ReviewTypeRepositoryContract;
 use App\Repositories\Contracts\RoleRepositoryContract;
+use App\Repositories\Contracts\ScheduleRepositoryContract;
 use App\Repositories\Contracts\UserRepositoryContract;
 use App\Repositories\Files\FileRepository;
 use App\Repositories\Machines\MachineRepository;
@@ -19,6 +20,7 @@ use App\Repositories\Peaces\PeaceRepository;
 use App\Repositories\Permissions\PermissionRepository;
 use App\Repositories\ReviewTypes\ReviewTypeRepository;
 use App\Repositories\Roles\RoleRepository;
+use App\Repositories\Schedules\ScheduleRepository;
 use App\Repositories\Users\UserRepository;
 use Illuminate\Support\ServiceProvider;
 
@@ -56,6 +58,8 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(ReviewTypeRepositoryContract::class, ReviewTypeRepository::class);
 
         $this->app->bind(RoleRepositoryContract::class, RoleRepository::class);
+
+        $this->app->bind(ScheduleRepositoryContract::class, ScheduleRepository::class);
 
         $this->app->bind(UserRepositoryContract::class, UserRepository::class);
     }

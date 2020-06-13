@@ -21,6 +21,8 @@ use Illuminate\Http\Request;
 
 Route::post('auth/login', 'Api\AuthController@login');
 
+Route::get('dashboard', 'Api\DashboardController@index');
+
 Route::group([
     'middleware' => 'jwt.verify',
 ], function () {
@@ -29,7 +31,7 @@ Route::group([
     //Route::post('auth/refresh', 'Api\AuthController@refresh');
     //Route::post('auth/me', 'Api\AuthController@me');
 
-    Route::get('dashboard', 'Api\DashboardController@index');
+
 
     Route::get('machines/logs', 'Api\AuditsController@index');
 

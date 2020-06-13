@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\Audit;
+namespace App\Repositories\Audits;
 
 use App\Repositories\Contracts\AuditRepositoryContract;
 use OwenIt\Auditing\Models\Audit;

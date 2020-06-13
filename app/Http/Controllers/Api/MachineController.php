@@ -143,7 +143,6 @@ class MachineController extends Controller
         try {
 
             $machine = $this->machineService->storeMachine($request);
-            //$machine = $this->machineRepository->create($request->all());
 
             return (new MachineResponse($machine))
                 ->response()

@@ -1,16 +1,14 @@
 <?php
 
-namespace App\Repositories\Machines;
+namespace App\Repositories\Schedules;
 
 use App\Entities\Schedule;
 use App\Repositories\Contracts\ScheduleRepositoryContract;
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
 use Prettus\Repository\Eloquent\BaseRepository;
 
 /**
- * Class MachineRepositoryContract
- * @package App\Repositories\Machines
+ * Class ScheduleRepository
+ * @package App\Repositories\Schedules
  */
 class ScheduleRepository extends BaseRepository implements ScheduleRepositoryContract
 {
