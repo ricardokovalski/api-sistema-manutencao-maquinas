@@ -80,7 +80,7 @@ class MachineService implements MachineServiceContract
 
         foreach ($schedules as $schedule) {
             $this->scheduleRepository->create([
-                'date' => (Carbon::instance(new \DateTime($schedule)))->toDateTimeString(),
+                'date' => $schedule,
                 'machine_id' => $machine->id
             ]);
         }
