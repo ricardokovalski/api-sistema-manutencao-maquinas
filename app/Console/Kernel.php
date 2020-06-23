@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\CheckMachines::class,
+        Commands\UpdateSchedules::class,
     ];
 
     /**
@@ -24,7 +25,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('check:machines')
+        $schedule->command('machines:check-machines')
             ->dailyAt('15:30');
     }
 

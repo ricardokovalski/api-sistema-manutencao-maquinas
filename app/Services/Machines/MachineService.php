@@ -70,6 +70,8 @@ class MachineService implements MachineServiceContract
     {
         $data = $request->only('name', 'description', 'technical', 'patrimony');
 
+        $data['warning_period'] = $request->get('warning_period') ?: null;
+
         $schedules = $request->get('review_period');
 
         $machine = $this->machineRepository->create($data);
@@ -81,7 +83,8 @@ class MachineService implements MachineServiceContract
         foreach ($schedules as $schedule) {
             $this->scheduleRepository->create([
                 'date' => $schedule,
-                'machine_id' => $machine->id
+                'machine_id' => $machine->id,
+                'status' => 1,
             ]);
         }
 
@@ -98,6 +101,8 @@ class MachineService implements MachineServiceContract
     {
         $data = $request->only('name', 'description', 'technical', 'patrimony');
 
+        $data['warning_period'] = $request->get('warning_period') ?: null;
+
         $schedules = $request->get('review_period');
 
         $machine = $this->machineRepository->update($data, $id);
@@ -109,7 +114,8 @@ class MachineService implements MachineServiceContract
         foreach ($schedules as $schedule) {
             $this->scheduleRepository->create([
                 'date' => $schedule,
-                'machine_id' => $machine->id
+                'machine_id' => $machine->id,
+                'status' => 1,
             ]);
         }
 

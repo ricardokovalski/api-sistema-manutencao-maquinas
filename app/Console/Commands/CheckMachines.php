@@ -16,7 +16,7 @@ class CheckMachines extends Command
      *
      * @var string
      */
-    protected $signature = 'check:machines';
+    protected $signature = 'machines:check-machines';
 
     /**
      * The console command description.

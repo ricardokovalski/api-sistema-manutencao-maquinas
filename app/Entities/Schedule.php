@@ -18,6 +18,7 @@ class Schedule extends Model
     protected $fillable = [
         'machine_id',
         'date',
+        'status',
     ];
 
 
