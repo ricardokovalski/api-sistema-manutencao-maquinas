@@ -80,10 +80,10 @@ class MachineRepository extends BaseRepository implements MachineRepositoryContr
                 (select MAX(maintenance.review_at)
                 from maintenance
                 where maintenance.machine_id = machines.id)) 
-                > ((select MIN(machine_schedules.date) 
+                > (? - (select MIN(machine_schedules.date) 
                 from machine_schedules 
                 where machine_schedules.machine_id = machines.id and 
-                machine_schedules.status = 1) - ?)', [
+                machine_schedules.status = 1))', [
                     $currentDate->toDateString(), $currentDate->toDateString()
                 ]);
         })->count();
