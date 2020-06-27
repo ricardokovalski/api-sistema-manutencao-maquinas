@@ -118,6 +118,9 @@ class MachineController extends Controller
                             'files.type'
                         );
                     },
+                    'schedules' => function ($query) {
+                        $query->select('machines_schedules.date');
+                    },
                 ])
                 ->orderBy('machines.name', 'asc')
                 ->all([
@@ -272,6 +275,9 @@ class MachineController extends Controller
                             'files.description',
                             'files.type'
                         );
+                    },
+                    'schedules' => function ($query) {
+                        $query->select('machines_schedules.date');
                     },
                 ])
                 ->find($id, [
