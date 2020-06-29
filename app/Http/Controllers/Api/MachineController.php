@@ -277,7 +277,7 @@ class MachineController extends Controller
                         );
                     },
                     'schedules' => function ($query) {
-                        $query->select('machines_schedules.date');
+                        $query->select('machine_schedules.date');
                     },
                 ])
                 ->find($id, [
