@@ -119,7 +119,7 @@ class MachineController extends Controller
                         );
                     },
                     'schedules' => function ($query) {
-                        $query->select('machine_schedules.date');
+                        $query->select('id', 'machine_id', 'status', 'date');
                     },
                 ])
                 ->orderBy('machines.name', 'asc')
@@ -277,7 +277,7 @@ class MachineController extends Controller
                         );
                     },
                     'schedules' => function ($query) {
-                        $query->select('machine_schedules.date');
+                        $query->select('id', 'machine_id', 'status', 'date');
                     },
                 ])
                 ->find($id, [
