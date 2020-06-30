@@ -111,8 +111,8 @@ class MachineService implements MachineServiceContract
             throw new MachineException('Não foi possível completar a edição da máquina.', Response::HTTP_NOT_FOUND);
         }
 
-        if (! $this->scheduleRepository->deleteWhere(['machine_id' => $machine->id])) {
-            throw new \Exception("Não foi possível remover os agendamentos antigos.", Response::HTTP_NOT_FOUND);
+        if ($this->scheduleRepository->findByField('machine_id', $machine->id)->first()) {
+            $this->scheduleRepository->deleteWhere(['machine_id' => $machine->id]);
         }
 
         foreach ($schedules as $schedule) {
