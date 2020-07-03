@@ -39,27 +39,6 @@ class MachineRepository extends BaseRepository implements MachineRepositoryContr
      */
     public function getTotalRed(Carbon $currentDate)
     {
-        //old
-        /*if (env('DB_CONNECTION') === 'mysql') {
-            return $this->model->where(function(Builder $query) use ($currentDate) {
-                $query->whereRaw('datediff(?, (
-                    select MAX(maintenance.review_at)
-                    from maintenance
-                    where maintenance.machine_id = machines.id
-                )) > machines.review_period', [$currentDate->toDateString()]);
-            })->count();
-        }
-
-        return $this->model->where(function(Builder $query) use ($currentDate) {
-            $query->whereRaw('(? - 
-                (select MAX(maintenance.review_at)
-                from maintenance
-                where maintenance.machine_id = machines.id)) 
-                > machines.review_period', [$currentDate->toDateString()]);
-        })->count();*/
-
-
-        //new
         if (env('DB_CONNECTION') === 'mysql') {
             return $this->model->where(function(Builder $query) use ($currentDate) {
                 return $query->whereRaw('datediff(?, (
@@ -95,38 +74,6 @@ class MachineRepository extends BaseRepository implements MachineRepositoryContr
      */
     public function getTotalYellow(Carbon $currentDate)
     {
-        //old
-        /*if (env('DB_CONNECTION') === 'mysql') {
-            return $this->model->where(function (Builder $query) use ($currentDate) {
-                $query->whereRaw('datediff(?, (
-                    select MAX(maintenance.review_at)
-                    from maintenance
-                    where maintenance.machine_id = machines.id
-                    )) > (machines.review_period - machines.warning_period)', [$currentDate->toDateString()]
-                )->whereRaw('datediff(?, (
-                    select MAX(maintenance.review_at)
-                    from maintenance
-                    where maintenance.machine_id = machines.id
-                    )) < machines.review_period', [$currentDate->toDateString()]
-                );
-            })->count();
-        }
-
-        return $this->model->where(function (Builder $query) use ($currentDate) {
-            $query->whereRaw('(? - 
-                (select MAX(maintenance.review_at)
-                from maintenance
-                where maintenance.machine_id = machines.id)) 
-                > (machines.review_period - machines.warning_period)', [$currentDate->toDateString()]
-            )->whereRaw('(? - 
-                (select MAX(maintenance.review_at)
-                from maintenance
-                where maintenance.machine_id = machines.id)) 
-                < machines.review_period', [$currentDate->toDateString()]
-            );
-        })->count();*/
-
-        //new
         if (env('DB_CONNECTION') === 'mysql') {
             return $this->model->where(function (Builder $query) use ($currentDate) {
                 $query->whereRaw('datediff(?, (
@@ -183,27 +130,7 @@ class MachineRepository extends BaseRepository implements MachineRepositoryContr
      */
     public function getTotalGreen(Carbon $currentDate)
     {
-        //old
-        /*if (env('DB_CONNECTION') === 'mysql') {
-            return $this->model->where(function(Builder $query) use ($currentDate) {
-                $query->whereRaw('datediff(?, (
-                    select MAX(maintenance.review_at)
-                    from maintenance
-                    where maintenance.machine_id = machines.id
-                )) < (machines.review_period - machines.warning_period)', [$currentDate->toDateString()]);
-            })->count();
-        }
-
-        return $this->model->where(function(Builder $query) use ($currentDate) {
-            $query->whereRaw('(? - (
-                    select MAX(maintenance.review_at)
-                    from maintenance
-                    where maintenance.machine_id = machines.id)) 
-                    < (machines.review_period - machines.warning_period)', [$currentDate->toDateString()]);
-        })->count();*/
-
-        //new
-        if (env('DB_CONNECTION') === 'mysql') {
+       if (env('DB_CONNECTION') === 'mysql') {
             return $this->model->leftJoin('maintenance', function ($join) {
                 return $join->on('maintenance.machine_id', '=', 'machines.id');
             })->where(function(Builder $query) {
@@ -250,13 +177,23 @@ class MachineRepository extends BaseRepository implements MachineRepositoryContr
                     select MAX(maintenance.review_at)
                     from maintenance
                     where maintenance.machine_id = machines.id
-                    )) > (machines.review_period - machines.warning_period)', [$currentDate->toDateString()]
-                )->whereRaw('datediff(?, (
+                    ))) > ((datediff((
+                    select MIN(machine_schedules.date)
+                    from machine_schedules
+                    where machine_schedules.machine_id = machines.id and 
+                    machine_schedules.status = 1
+                    ), ?) - machines.warning_period)', [
+                    $currentDate->toDateString(), $currentDate->toDateString()
+                ])->whereRaw('datediff(?, (
                     select MAX(maintenance.review_at)
                     from maintenance
                     where maintenance.machine_id = machines.id
-                    )) < machines.review_period', [$currentDate->toDateString()]
-                );
+                    )) < datediff((select MIN(machine_schedules.date)
+                    from machine_schedules
+                    where machine_schedules.machine_id = machines.id and 
+                    machine_schedules.status = 1), ?)', [
+                    $currentDate->toDateString(), $currentDate->toDateString()
+                ]);
             })->get();
         }
 
@@ -265,13 +202,22 @@ class MachineRepository extends BaseRepository implements MachineRepositoryContr
                 (select MAX(maintenance.review_at)
                 from maintenance
                 where maintenance.machine_id = machines.id)) 
-                > (machines.review_period - machines.warning_period)', [$currentDate->toDateString()]
-            )->whereRaw('(? - 
+                > (((select MIN(machine_schedules.date::TIMESTAMP::DATE)
+                from machine_schedules
+                where machine_schedules.machine_id = machines.id and 
+                machine_schedules.status = 1
+                ) - ?) - machines.warning_period)', [
+                $currentDate->toDateString(), $currentDate->toDateString()
+            ])->whereRaw('(? - 
                 (select MAX(maintenance.review_at)
                 from maintenance
                 where maintenance.machine_id = machines.id)) 
-                < machines.review_period', [$currentDate->toDateString()]
-            );
+                < ((select MIN(machine_schedules.date::TIMESTAMP::DATE)
+                from machine_schedules
+                where machine_schedules.machine_id = machines.id and 
+                machine_schedules.status = 1) - ?)', [
+                $currentDate->toDateString(), $currentDate->toDateString()
+            ]);
         })->get();
     }
 }
