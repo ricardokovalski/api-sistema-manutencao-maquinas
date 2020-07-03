@@ -55,14 +55,14 @@ class MachineRepository extends BaseRepository implements MachineRepositoryContr
         }
 
         return $this->model->where(function(Builder $query) use ($currentDate) {
-            $query->whereRaw('(? - 
+            $query->whereRaw('( 
                 (select MAX(maintenance.review_at)
                 from maintenance
-                where maintenance.machine_id = machines.id)) 
-                > (? - (select MIN(machine_schedules.date::TIMESTAMP::DATE) 
+                where maintenance.machine_id = machines.id) - ?) 
+                > ((select MIN(machine_schedules.date::TIMESTAMP::DATE) 
                 from machine_schedules 
                 where machine_schedules.machine_id = machines.id and 
-                machine_schedules.status = 1))', [
+                machine_schedules.status = 1) - ?)', [
                     $currentDate->toDateString(), $currentDate->toDateString()
                 ]);
         })->count();
